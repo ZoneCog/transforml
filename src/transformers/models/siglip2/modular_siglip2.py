@@ -19,6 +19,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 from torch.nn import BCEWithLogitsLoss, CrossEntropyLoss, MSELoss
 
+from ...modeling_attn_mask_utils import _prepare_4d_attention_mask
 from ..siglip.configuration_siglip import SiglipConfig, SiglipTextConfig, SiglipVisionConfig
 from ..siglip.modeling_siglip import (
     BaseModelOutput,
@@ -35,8 +36,6 @@ from ..siglip.modeling_siglip import (
     SiglipVisionModelOutput,
     SiglipVisionTransformer,
 )
-
-from ...modeling_attn_mask_utils import _prepare_4d_attention_mask
 
 
 class Siglip2TextConfig(SiglipTextConfig):

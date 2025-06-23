@@ -26,6 +26,18 @@ import torch.utils.checkpoint
 from torch import nn
 from torch.nn import Parameter
 
+from ...configuration_utils import PretrainedConfig, layer_type_validation
+from ...generation import GenerationMixin
+from ...modeling_flash_attention_utils import is_flash_attn_available
+from ...modeling_outputs import BaseModelOutput, ModelOutput
+from ...modeling_rope_utils import rope_config_validation
+from ...modeling_utils import ALL_ATTENTION_FUNCTIONS
+from ...utils import (
+    auto_docstring,
+    check_torch_load_is_safe,
+    logging,
+)
+from ...utils.hub import cached_file
 from ..llama.modeling_llama import rotate_half
 from ..qwen2_5_vl.configuration_qwen2_5_vl import Qwen2_5_VLVisionConfig
 from ..qwen2_5_vl.modeling_qwen2_5_vl import (
@@ -41,19 +53,6 @@ from ..qwen2_5_vl.modeling_qwen2_5_vl import (
 from ..qwen2_audio.configuration_qwen2_audio import Qwen2AudioEncoderConfig
 from ..qwen2_audio.modeling_qwen2_audio import Qwen2AudioEncoderLayer
 from ..qwen2_vl.modeling_qwen2_vl import Qwen2VLRotaryEmbedding
-
-from ...configuration_utils import PretrainedConfig, layer_type_validation
-from ...generation import GenerationMixin
-from ...modeling_flash_attention_utils import is_flash_attn_available
-from ...modeling_outputs import BaseModelOutput, ModelOutput
-from ...modeling_rope_utils import rope_config_validation
-from ...modeling_utils import ALL_ATTENTION_FUNCTIONS
-from ...utils import (
-    auto_docstring,
-    check_torch_load_is_safe,
-    logging,
-)
-from ...utils.hub import cached_file
 
 
 if is_flash_attn_available():

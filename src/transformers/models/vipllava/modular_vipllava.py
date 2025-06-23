@@ -18,6 +18,8 @@ from typing import Optional, Union
 import torch
 from torch import nn
 
+from ...activations import ACT2FN
+from ...utils import auto_docstring, is_torchdynamo_compiling, logging
 from ..llava.modeling_llava import (
     LlavaCausalLMOutputWithPast,
     LlavaForConditionalGeneration,
@@ -25,9 +27,6 @@ from ..llava.modeling_llava import (
     LlavaModelOutputWithPast,
     LlavaPreTrainedModel,
 )
-
-from ...activations import ACT2FN
-from ...utils import auto_docstring, is_torchdynamo_compiling, logging
 from .configuration_vipllava import VipLlavaConfig
 
 

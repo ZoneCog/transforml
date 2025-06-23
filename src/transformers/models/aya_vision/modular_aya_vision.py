@@ -19,6 +19,10 @@ from typing import Optional, Union
 import torch
 from torch import nn
 
+from ...activations import ACT2FN
+from ...modeling_flash_attention_utils import FlashAttentionKwargs
+from ...processing_utils import Unpack
+from ...utils import auto_docstring, can_return_tuple, is_torchdynamo_compiling, logging
 from ..llava.modeling_llava import (
     KwargsForCausalLM,
     LlavaCausalLMOutputWithPast,
@@ -27,11 +31,6 @@ from ..llava.modeling_llava import (
     LlavaModelOutputWithPast,
     LlavaPreTrainedModel,
 )
-
-from ...activations import ACT2FN
-from ...modeling_flash_attention_utils import FlashAttentionKwargs
-from ...processing_utils import Unpack
-from ...utils import auto_docstring, can_return_tuple, is_torchdynamo_compiling, logging
 from .configuration_aya_vision import AyaVisionConfig
 
 

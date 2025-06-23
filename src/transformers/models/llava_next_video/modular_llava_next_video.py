@@ -19,6 +19,11 @@ from typing import Optional, Union
 import torch
 from torch import nn
 
+from ...configuration_utils import PretrainedConfig
+from ...modeling_flash_attention_utils import FlashAttentionKwargs
+from ...processing_utils import Unpack
+from ...utils import is_torchdynamo_compiling, logging
+from ..auto import CONFIG_MAPPING, AutoConfig
 from ..llava_next.modeling_llava_next import (
     KwargsForCausalLM,
     LlavaNextCausalLMOutputWithPast,
@@ -28,12 +33,6 @@ from ..llava_next.modeling_llava_next import (
     LlavaNextMultiModalProjector,
     image_size_to_num_patches,
 )
-
-from ...configuration_utils import PretrainedConfig
-from ...modeling_flash_attention_utils import FlashAttentionKwargs
-from ...processing_utils import Unpack
-from ...utils import is_torchdynamo_compiling, logging
-from ..auto import CONFIG_MAPPING, AutoConfig
 
 
 logger = logging.get_logger(__name__)

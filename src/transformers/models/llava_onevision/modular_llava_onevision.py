@@ -19,19 +19,6 @@ from typing import Optional, Union
 import torch
 from torch import nn
 
-from ..llava_next.image_processing_llava_next_fast import LlavaNextImageProcessorFast
-from ..llava_next_video.modeling_llava_next_video import (
-    KwargsForCausalLM,
-    LlavaNextVideoCausalLMOutputWithPast,
-    LlavaNextVideoForConditionalGeneration,
-    LlavaNextVideoModel,
-    LlavaNextVideoModelOutputWithPast,
-    LlavaNextVideoPreTrainedModel,
-    get_anyres_image_grid_shape,
-    image_size_to_num_patches,
-    unpad_image,
-)
-
 from ...image_processing_utils import BatchFeature
 from ...image_processing_utils_fast import DefaultFastImageProcessorKwargs, group_images_by_shape, reorder_images
 from ...image_utils import (
@@ -53,6 +40,18 @@ from ...utils import (
     is_torchvision_available,
     is_torchvision_v2_available,
     logging,
+)
+from ..llava_next.image_processing_llava_next_fast import LlavaNextImageProcessorFast
+from ..llava_next_video.modeling_llava_next_video import (
+    KwargsForCausalLM,
+    LlavaNextVideoCausalLMOutputWithPast,
+    LlavaNextVideoForConditionalGeneration,
+    LlavaNextVideoModel,
+    LlavaNextVideoModelOutputWithPast,
+    LlavaNextVideoPreTrainedModel,
+    get_anyres_image_grid_shape,
+    image_size_to_num_patches,
+    unpad_image,
 )
 
 

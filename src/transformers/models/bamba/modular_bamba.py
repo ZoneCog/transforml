@@ -26,7 +26,17 @@ import torch.utils.checkpoint
 from torch import nn
 
 from ...activations import ACT2FN
-from ..jamba.modeling_jamba import JambaAttentionDecoderLayer, HybridMambaAttentionDynamicCache
+from ...modeling_attn_mask_utils import AttentionMaskConverter
+from ...modeling_outputs import BaseModelOutputWithPast, CausalLMOutputWithPast
+from ...modeling_utils import PreTrainedModel
+from ...processing_utils import Unpack
+from ...utils import (
+    auto_docstring,
+    can_return_tuple,
+    logging,
+)
+from ...utils.import_utils import is_causal_conv1d_available, is_mamba_2_ssm_available
+from ..jamba.modeling_jamba import HybridMambaAttentionDynamicCache, JambaAttentionDecoderLayer
 from ..llama.modeling_llama import (
     LlamaAttention,
     LlamaForCausalLM,
@@ -41,17 +51,6 @@ from ..mamba2.modeling_mamba2 import (
     reshape_into_chunks,
     segment_sum,
 )
-
-from ...modeling_attn_mask_utils import AttentionMaskConverter
-from ...modeling_outputs import BaseModelOutputWithPast, CausalLMOutputWithPast
-from ...modeling_utils import PreTrainedModel
-from ...processing_utils import Unpack
-from ...utils import (
-    auto_docstring,
-    can_return_tuple,
-    logging,
-)
-from ...utils.import_utils import is_causal_conv1d_available, is_mamba_2_ssm_available
 from .configuration_bamba import BambaConfig
 
 

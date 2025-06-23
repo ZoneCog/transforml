@@ -22,7 +22,6 @@ from torch import nn
 from ...activations import ACT2FN
 from ...modeling_layers import GradientCheckpointingLayer
 from ...modeling_outputs import Wav2Vec2BaseModelOutput
-from ...modeling_utils import PreTrainedModel
 from ..wav2vec2.modeling_wav2vec2 import (
     Wav2Vec2Adapter,
     Wav2Vec2Encoder,

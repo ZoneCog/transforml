@@ -15,6 +15,10 @@ from typing import Optional, Union
 import torch
 import torch.nn as nn
 
+from ...modeling_outputs import DepthEstimatorOutput
+from ...modeling_utils import PreTrainedModel
+from ...utils import auto_docstring
+from ...utils.generic import torch_int
 from ..depth_anything.configuration_depth_anything import DepthAnythingConfig
 from ..depth_anything.modeling_depth_anything import (
     DepthAnythingDepthEstimationHead,
@@ -24,11 +28,6 @@ from ..depth_anything.modeling_depth_anything import (
     DepthAnythingNeck,
     DepthAnythingReassembleStage,
 )
-from ...utils.generic import torch_int
-
-from ...modeling_outputs import DepthEstimatorOutput
-from ...modeling_utils import PreTrainedModel
-from ...utils import auto_docstring
 
 
 class PromptDepthAnythingConfig(DepthAnythingConfig):

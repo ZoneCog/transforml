@@ -21,7 +21,7 @@ import torch.utils.checkpoint
 from torch import nn
 from torch.nn import BCEWithLogitsLoss, CrossEntropyLoss, MSELoss
 
-from ....transformers.models.dinov2.modeling_dinov2 import (
+from ..dinov2.modeling_dinov2 import (
     Dinov2Backbone,
     Dinov2Encoder,
     Dinov2ForImageClassification,

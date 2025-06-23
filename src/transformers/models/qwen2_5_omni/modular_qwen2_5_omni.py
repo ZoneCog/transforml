@@ -26,9 +26,9 @@ import torch.utils.checkpoint
 from torch import nn
 from torch.nn import Parameter
 
-from transformers.models.llama.modeling_llama import rotate_half
-from transformers.models.qwen2_5_vl.configuration_qwen2_5_vl import Qwen2_5_VLVisionConfig
-from transformers.models.qwen2_5_vl.modeling_qwen2_5_vl import (
+from ..llama.modeling_llama import rotate_half
+from ..qwen2_5_vl.configuration_qwen2_5_vl import Qwen2_5_VLVisionConfig
+from ..qwen2_5_vl.modeling_qwen2_5_vl import (
     Qwen2_5_VisionTransformerPretrainedModel,
     Qwen2_5_VLAttention,
     Qwen2_5_VLMLP,
@@ -38,9 +38,9 @@ from transformers.models.qwen2_5_vl.modeling_qwen2_5_vl import (
     Qwen2RMSNorm,
     eager_attention_forward,
 )
-from transformers.models.qwen2_audio.configuration_qwen2_audio import Qwen2AudioEncoderConfig
-from transformers.models.qwen2_audio.modeling_qwen2_audio import Qwen2AudioEncoderLayer
-from transformers.models.qwen2_vl.modeling_qwen2_vl import Qwen2VLRotaryEmbedding
+from ..qwen2_audio.configuration_qwen2_audio import Qwen2AudioEncoderConfig
+from ..qwen2_audio.modeling_qwen2_audio import Qwen2AudioEncoderLayer
+from ..qwen2_vl.modeling_qwen2_vl import Qwen2VLRotaryEmbedding
 
 from ...configuration_utils import PretrainedConfig, layer_type_validation
 from ...generation import GenerationMixin

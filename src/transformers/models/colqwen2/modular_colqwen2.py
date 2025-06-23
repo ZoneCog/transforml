@@ -16,8 +16,8 @@
 from dataclasses import dataclass
 from typing import Optional, Union
 
-from transformers.models.colpali.modeling_colpali import ColPaliForRetrieval, ColPaliPreTrainedModel
-from transformers.models.colpali.processing_colpali import ColPaliProcessor
+from ..colpali.modeling_colpali import ColPaliForRetrieval, ColPaliPreTrainedModel
+from ..colpali.processing_colpali import ColPaliProcessor
 
 from ...cache_utils import Cache
 from ...feature_extraction_utils import BatchFeature

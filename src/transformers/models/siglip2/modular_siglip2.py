@@ -19,8 +19,8 @@ import torch.nn as nn
 import torch.nn.functional as F
 from torch.nn import BCEWithLogitsLoss, CrossEntropyLoss, MSELoss
 
-from transformers.models.siglip.configuration_siglip import SiglipConfig, SiglipTextConfig, SiglipVisionConfig
-from transformers.models.siglip.modeling_siglip import (
+from ..siglip.configuration_siglip import SiglipConfig, SiglipTextConfig, SiglipVisionConfig
+from ..siglip.modeling_siglip import (
     BaseModelOutput,
     BaseModelOutputWithPooling,
     ImageClassifierOutput,

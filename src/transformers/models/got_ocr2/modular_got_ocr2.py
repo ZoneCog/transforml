@@ -20,7 +20,7 @@ import torch
 import torch.nn as nn
 import torch.utils.checkpoint
 
-from transformers.models.llava.modeling_llava import (
+from ..llava.modeling_llava import (
     KwargsForCausalLM,
     LlavaCausalLMOutputWithPast,
     LlavaForConditionalGeneration,
@@ -28,7 +28,7 @@ from transformers.models.llava.modeling_llava import (
     LlavaModelOutputWithPast,
     LlavaPreTrainedModel,
 )
-from transformers.models.sam.modeling_sam import SamMLPBlock, SamVisionAttention, SamVisionEncoder, SamVisionLayer
+from ..sam.modeling_sam import SamMLPBlock, SamVisionAttention, SamVisionEncoder, SamVisionLayer
 
 from ...configuration_utils import PretrainedConfig
 from ...modeling_flash_attention_utils import FlashAttentionKwargs

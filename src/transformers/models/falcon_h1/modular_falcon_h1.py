@@ -26,9 +26,9 @@ import torch.nn.functional as F
 import torch.utils.checkpoint
 from torch import nn
 
-from transformers.activations import ACT2FN
-from transformers.models.jamba.modeling_jamba import HybridMambaAttentionDynamicCache
-from transformers.models.llama.modeling_llama import (
+from ...activations import ACT2FN
+from ..jamba.modeling_jamba import HybridMambaAttentionDynamicCache
+from ..llama.modeling_llama import (
     LlamaAttention,
     LlamaForCausalLM,
     LlamaMLP,
@@ -37,7 +37,7 @@ from transformers.models.llama.modeling_llama import (
     apply_rotary_pos_emb,
     eager_attention_forward,
 )
-from transformers.models.mamba2.modeling_mamba2 import (
+from ..mamba2.modeling_mamba2 import (
     MambaRMSNormGated,
     pad_tensor_by_size,
     reshape_into_chunks,
@@ -302,7 +302,7 @@ def apply_mask_to_padding_states(hidden_states, attention_mask):
     return hidden_states
 
 
-# Adapted from transformers.models.mamba2.modeling_mamba2.Mamba2Mixer
+# Adapted from ..mamba2.modeling_mamba2.Mamba2Mixer
 class FalconH1Mixer(nn.Module):
     """
     FalconH1Mixer is identical to classic Mamba2 mixer classes but differs on two different things
@@ -994,7 +994,7 @@ def compute_mup_vector(config):
 
 
 @auto_docstring
-# Adapted from transformers.models.jamba.modeling_jamba.JambaModel
+# Adapted from ..jamba.modeling_jamba.JambaModel
 class FalconH1Model(FalconH1PreTrainedModel):
     def __init__(self, config: FalconH1Config):
         super().__init__(config)

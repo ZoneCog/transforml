@@ -503,7 +503,7 @@ class WavLMGumbelVectorQuantizer(nn.Module):
         return codevectors, perplexity
 
 
-class WavLMPreTrainedModel(PreTrainedModel, Wav2Vec2PreTrainedModel):
+class WavLMPreTrainedModel(Wav2Vec2PreTrainedModel):
     config_class = WavLMConfig
     base_model_prefix = "wavlm"
     main_input_name = "input_values"

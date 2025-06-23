@@ -134,7 +134,7 @@ class Data2VecAudioAdapter(Wav2Vec2Adapter):
     pass
 
 
-class Data2VecAudioPreTrainedModel(PreTrainedModel, Wav2Vec2PreTrainedModel):
+class Data2VecAudioPreTrainedModel(Wav2Vec2PreTrainedModel):
     config_class = Data2VecAudioConfig
     base_model_prefix = "data2vec_audio"
     main_input_name = "input_values"

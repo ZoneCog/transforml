@@ -4,7 +4,7 @@ import torch
 import torch.nn as nn
 from torch.nn import BCEWithLogitsLoss, CrossEntropyLoss, MSELoss
 
-from transformers.models.ijepa.configuration_ijepa import IJepaConfig
+from ..ijepa.configuration_ijepa import IJepaConfig
 
 from ...modeling_outputs import ImageClassifierOutput
 from ...modeling_utils import PreTrainedModel

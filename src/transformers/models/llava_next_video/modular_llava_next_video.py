@@ -19,7 +19,7 @@ from typing import Optional, Union
 import torch
 from torch import nn
 
-from transformers.models.llava_next.modeling_llava_next import (
+from ..llava_next.modeling_llava_next import (
     KwargsForCausalLM,
     LlavaNextCausalLMOutputWithPast,
     LlavaNextForConditionalGeneration,

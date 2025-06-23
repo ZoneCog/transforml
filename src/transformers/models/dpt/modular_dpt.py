@@ -18,9 +18,9 @@ import math
 from collections.abc import Iterable
 from typing import TYPE_CHECKING, Optional, Union
 
-from transformers.image_processing_base import BatchFeature
-from transformers.image_transforms import group_images_by_shape, reorder_images
-from transformers.models.beit.image_processing_beit_fast import BeitImageProcessorFast
+from ...image_processing_base import BatchFeature
+from ...image_transforms import group_images_by_shape, reorder_images
+from ..beit.image_processing_beit_fast import BeitImageProcessorFast
 
 from ...image_processing_utils_fast import (
     DefaultFastImageProcessorKwargs,

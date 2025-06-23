@@ -25,10 +25,9 @@ import torch
 import torch.utils.checkpoint
 from torch import nn
 
-import transformers.models.jamba.modeling_jamba as modeling_jamba
-from transformers.activations import ACT2FN
-from transformers.models.jamba.modeling_jamba import JambaAttentionDecoderLayer
-from transformers.models.llama.modeling_llama import (
+from ...activations import ACT2FN
+from ..jamba.modeling_jamba import JambaAttentionDecoderLayer, HybridMambaAttentionDynamicCache
+from ..llama.modeling_llama import (
     LlamaAttention,
     LlamaForCausalLM,
     LlamaMLP,
@@ -36,7 +35,7 @@ from transformers.models.llama.modeling_llama import (
     LlamaRotaryEmbedding,
     rotate_half,
 )
-from transformers.models.mamba2.modeling_mamba2 import (
+from ..mamba2.modeling_mamba2 import (
     MambaRMSNormGated,
     pad_tensor_by_size,
     reshape_into_chunks,
@@ -99,7 +98,7 @@ class BambaFlashAttentionKwargs(TypedDict, total=False):
 
 
 # Adapted from transformers.models.jamba.modeling_jamba.HybridMambaAttentionDynamicCache for the v2 mixer
-class HybridMambaAttentionDynamicCache(modeling_jamba.HybridMambaAttentionDynamicCache):
+class HybridMambaAttentionDynamicCache(HybridMambaAttentionDynamicCache):
     """
     A dynamic cache that can handle both the attention cache (which has a seq_len dimension) and the mamba cache
     (which has a constant shape regardless of seq_len).

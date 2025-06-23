@@ -18,7 +18,7 @@ from typing import Optional, Union
 import torch
 from torch import nn
 
-from transformers.models.llava.modeling_llava import (
+from ..llava.modeling_llava import (
     LlavaCausalLMOutputWithPast,
     LlavaForConditionalGeneration,
     LlavaModel,

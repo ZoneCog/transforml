@@ -15,7 +15,7 @@ jobs:
       - run: echo ${{ needs.get-pr-number.outputs.PR_NUMBER }}
 
   get-pr-sha:
-    name: Get PR number
+    name: Get PR commit SHA
     needs: get-pr-number
     uses: ./.github/workflows/self-get-pr-sha.yml
     with:

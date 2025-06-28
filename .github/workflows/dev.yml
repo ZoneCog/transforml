@@ -30,9 +30,10 @@ jobs:
           echo ${{ needs.get-pr-sha.outputs.PR_HEAD_SHA_BAD }}
           echo ${{ needs.get-pr-sha.outputs.PR_MERGE_SHA_BAD }}
           echo ${{ needs.get-pr-sha.outputs.PR_HEAD_REPO_FULL_NAME }}
+          echo ${{ needs.get-pr-sha.outputs.PR_BASE_REPO_FULL_NAME }}
           echo ${{ needs.get-pr-sha.outputs.PR_HEAD_REF }}
           echo ${{ needs.get-pr-sha.outputs.PR_BASE_REF }}
           echo ${{ needs.get-pr-sha.outputs.PR_HEAD_SHA }}
           echo ${{ needs.get-pr-sha.outputs.PR_BASE_SHA }}
           echo ${{ needs.get-pr-sha.outputs.PR_MERGE_SHA }}
-          echo ${{ needs.get-pr-sha.outputs.PR }}
+#          echo ${{ needs.get-pr-sha.outputs.PR }}

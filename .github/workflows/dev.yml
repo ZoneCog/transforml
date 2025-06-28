@@ -9,7 +9,7 @@ jobs:
     uses: ./.github/workflows/self-get-pr-number.yml
 
   show-pr-number:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     needs: get-pr-number
     steps:
       - run: echo ${{ needs.get-pr-number.outputs.PR_NUMBER }}
@@ -23,7 +23,7 @@ jobs:
       pr_number: ${{ needs.get-pr-number.outputs.PR_NUMBER }}
 
   show-pr-sha:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     needs: get-pr-sha
     steps:
       - run: |
@@ -45,3 +45,18 @@ jobs:
           echo ${{ needs.get-pr-sha.outputs.PR_HEAD_COMMIT_TIMESTAMP }}
           echo ${{ needs.get-pr-sha.outputs.PR_MERGE_COMMIT_TIMESTAMP }}
 #          echo ${{ needs.get-pr-sha.outputs.PR }}
+
+  verity_pr_commit:
+    name: Verity PR commit corresponds to a specific event by comparing timestamps
+    runs-on: ubuntu-22.04
+    needs: get-pr-sha
+    env:
+      COMMENT_TIMESTAMP: 1751143805
+      PR_MERGE_COMMIT_TIMESTAMP: ${{ needs.get-pr-sha.outputs.PR_MERGE_COMMIT_TIMESTAMP }}
+    steps:
+      - run: |
+          echo $PR_MERGE_COMMIT_TIMESTAMP
+          if [ $COMMENT_TIMESTAMP -le $PR_MERGE_COMMIT_TIMESTAMP ]; then
+            echo "Last commit on the pull request is newer than the issue comment triggering this run! Abort!";
+            exit -1;
+          fi

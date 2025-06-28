@@ -159,5 +159,15 @@ jobs:
             console.log('PR Details 2:', {
               merge_commit: merge_commit,
               commit: merge_commit.commit,
-              date: merge_commit.commit.committer.date,
+              date: merge_commit.commit.committer.date
             });
+
+      - name: Convert dates to timestamps
+        id: get_timestamps
+        run: |
+          InputDate=${{ steps.pr_info.outputs.head_commit_date }}
+          echo $InputDate
+          epochDate=$(date -d "$InputDate" +%s)
+          echo $epochDate
+          epochDate2=$(date -u -d "$InputDate" +%s)
+          echo $epochDate2

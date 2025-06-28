@@ -38,42 +38,29 @@ jobs:
     steps:
       - run: echo ${{ needs.get-pr-number.outputs.PR_NUMBER }}
 
-  get-sha:
-    runs-on: ubuntu-22.04
+  get-pr-sha:
+    name: Get PR commit SHA
     needs: get-pr-number
     if: ${{ needs.get-pr-number.outputs.PR_NUMBER != ''}}
-    outputs:
-      PR_HEAD_SHA: ${{ steps.get_sha.outputs.PR_HEAD_SHA }}
-      PR_MERGE_SHA: ${{ steps.get_sha.outputs.PR_MERGE_SHA }}
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: "0"
-          ref: "refs/pull/${{needs.get-pr-number.outputs.PR_NUMBER}}/merge"
+    uses: ./.github/workflows/self-get-pr-sha.yml
+    with:
+      pr_number: ${{ needs.get-pr-number.outputs.PR_NUMBER }}
 
-      - name: Get SHA (and verify timestamps against the issue comment date)
-        id: get_sha
-        env:
-          PR_NUMBER: ${{ needs.get-pr-number.outputs.PR_NUMBER }}
-          COMMENT_DATE: ${{ github.event.comment.created_at }}
-        run: |
-            git fetch origin refs/pull/$PR_NUMBER/head:refs/remotes/pull/$PR_NUMBER/head
-            git checkout refs/remotes/pull/$PR_NUMBER/head
-            echo "PR_HEAD_SHA: $(git log -1 --format=%H)"
-            echo "PR_HEAD_SHA=$(git log -1 --format=%H)" >> "$GITHUB_OUTPUT"
-            git fetch origin refs/pull/$PR_NUMBER/merge:refs/remotes/pull/$PR_NUMBER/merge
-            git checkout refs/remotes/pull/$PR_NUMBER/merge
-            echo "PR_MERGE_SHA: $(git log -1 --format=%H)"
-            echo "PR_MERGE_SHA=$(git log -1 --format=%H)" >> "$GITHUB_OUTPUT"
-            PR_MERGE_COMMIT_TIMESTAMP=$(git log -1 --date=unix --format=%cd)
-            echo "PR_MERGE_COMMIT_TIMESTAMP: $PR_MERGE_COMMIT_TIMESTAMP"
-            COMMENT_TIMESTAMP=$(date -d "${COMMENT_DATE}" +"%s")
-            echo "COMMENT_DATE: $COMMENT_DATE"
-            echo "COMMENT_TIMESTAMP: $COMMENT_TIMESTAMP"
-            if [ $COMMENT_TIMESTAMP -le $PR_MERGE_COMMIT_TIMESTAMP ]; then
-              echo "Last commit on the pull request is newer than the issue comment triggering this run! Abort!";
-              exit -1;
-            fi
+  # TODO: remove this job
+  show-pr-sha:
+    runs-on: ubuntu-latest
+    needs: get-pr-sha
+    steps:
+      - run: |
+          echo ${{ needs.get-pr-sha.outputs.PR_HEAD_SHA_BAD }}
+          echo ${{ needs.get-pr-sha.outputs.PR_MERGE_SHA_BAD }}
+          echo ${{ needs.get-pr-sha.outputs.PR_HEAD_REPO_FULL_NAME }}
+          echo ${{ needs.get-pr-sha.outputs.PR_HEAD_REF }}
+          echo ${{ needs.get-pr-sha.outputs.PR_BASE_REF }}
+          echo ${{ needs.get-pr-sha.outputs.PR_HEAD_SHA }}
+          echo ${{ needs.get-pr-sha.outputs.PR_BASE_SHA }}
+          echo ${{ needs.get-pr-sha.outputs.PR_MERGE_SHA }}
+          echo ${{ needs.get-pr-sha.outputs.PR }}
 
   # use a python script to handle this complex logic
   # case 1: `run-slow` (auto. infer with limited number of models, but in particular, new model)

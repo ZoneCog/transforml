@@ -6,28 +6,31 @@ on:
         required: true
         type: string
     outputs:
-      PR_HEAD_SHA:
+      PR_HEAD_SHA_BAD:
         description: "The extracted PR commit SHA"
-        value: ${{ jobs.get-pr-sha.outputs.PR_HEAD_SHA }}
-      PR_MERGE_SHA:
+        value: ${{ jobs.get-pr-sha.outputs.PR_HEAD_SHA_BAD }}
+      PR_MERGE_SHA_BAD:
         description: "The extracted PR commit SHA"
-        value: ${{ jobs.get-pr-sha.outputs.PR_MERGE_SHA }}
-      PR_HEAD_REF_BETTER:
+        value: ${{ jobs.get-pr-sha.outputs.PR_MERGE_SHA_BAD }}
+      PR_HEAD_REPO_FULL_NAME:
+        description: "The extracted PR commit SHA"
+        value: ${{ jobs.get-pr-sha-better.outputs.PR_HEAD_REPO_FULL_NAME }}
+      PR_HEAD_REF:
         description: "The extracted PR commit SHA"
         value: ${{ jobs.get-pr-sha-better.outputs.PR_HEAD_REF }}
-      PR_BASE_REF_BETTER:
+      PR_BASE_REF:
         description: "The extracted PR commit SHA"
         value: ${{ jobs.get-pr-sha-better.outputs.PR_BASE_REF }}
-      PR_HEAD_SHA_BETTER:
+      PR_HEAD_SHA:
         description: "The extracted PR commit SHA"
         value: ${{ jobs.get-pr-sha-better.outputs.PR_HEAD_SHA }}
-      PR_BASE_SHA_BETTER:
+      PR_BASE_SHA:
         description: "The extracted PR commit SHA"
         value: ${{ jobs.get-pr-sha-better.outputs.PR_BASE_SHA }}
-      PR_MERGE_SHA_BETTER:
+      PR_MERGE_SHA:
         description: "The extracted PR commit SHA"
         value: ${{ jobs.get-pr-sha-better.outputs.PR_MERGE_SHA }}
-      PR_BETTER:
+      PR:
         description: "The extracted PR commit SHA"
         value: ${{ jobs.get-pr-sha-better.outputs.PR }}
 
@@ -36,8 +39,8 @@ jobs:
     runs-on: ubuntu-22.04
     name: Get PR commit SHA
     outputs:
-      PR_HEAD_SHA: ${{ steps.get_sha.outputs.PR_HEAD_SHA }}
-      PR_MERGE_SHA: ${{ steps.get_sha.outputs.PR_MERGE_SHA }}
+      PR_HEAD_SHA_BAD: ${{ steps.get_sha.outputs.PR_HEAD_SHA }}
+      PR_MERGE_SHA_BAD: ${{ steps.get_sha.outputs.PR_MERGE_SHA }}
     if: ${{ inputs.pr_number != '' }}
     steps:
       - uses: actions/checkout@v4
@@ -70,6 +73,7 @@ jobs:
     runs-on: ubuntu-22.04
     name: Get PR commit SHA better
     outputs:
+      PR_HEAD_REPO_FULL_NAME: ${{ steps.pr_info.outputs.head_repo_full_name }}
       PR_HEAD_REF: ${{ steps.pr_info.outputs.head_ref }}
       PR_BASE_REF: ${{ steps.pr_info.outputs.base_ref }}
       PR_HEAD_SHA: ${{ steps.pr_info.outputs.head_sha }}
@@ -89,6 +93,7 @@ jobs:
               pull_number: ${{ inputs.pr_number }}
             });
 
+            core.setOutput('head_repo_full_name', pr.head.repo.full_name);
             core.setOutput('head_ref', pr.head.ref);
             core.setOutput('base_ref', pr.base.ref);
             core.setOutput('head_sha', pr.head.sha);

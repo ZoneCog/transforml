@@ -17,6 +17,7 @@ jobs:
   get-pr-sha:
     name: Get PR commit SHA
     needs: get-pr-number
+    if: ${{ needs.get-pr-number.outputs.PR_NUMBER != ''}}
     uses: ./.github/workflows/self-get-pr-sha.yml
     with:
       pr_number: ${{ needs.get-pr-number.outputs.PR_NUMBER }}
@@ -26,11 +27,12 @@ jobs:
     needs: get-pr-sha
     steps:
       - run: |
+          echo ${{ needs.get-pr-sha.outputs.PR_HEAD_SHA_BAD }}
+          echo ${{ needs.get-pr-sha.outputs.PR_MERGE_SHA_BAD }}
+          echo ${{ needs.get-pr-sha.outputs.PR_HEAD_REPO_FULL_NAME }}
+          echo ${{ needs.get-pr-sha.outputs.PR_HEAD_REF }}
+          echo ${{ needs.get-pr-sha.outputs.PR_BASE_REF }}
           echo ${{ needs.get-pr-sha.outputs.PR_HEAD_SHA }}
+          echo ${{ needs.get-pr-sha.outputs.PR_BASE_SHA }}
           echo ${{ needs.get-pr-sha.outputs.PR_MERGE_SHA }}
-          echo ${{ needs.get-pr-sha.outputs.PR_HEAD_REF_BETTER }}
-          echo ${{ needs.get-pr-sha.outputs.PR_BASE_REF_BETTER }}
-          echo ${{ needs.get-pr-sha.outputs.PR_HEAD_SHA_BETTER }}
-          echo ${{ needs.get-pr-sha.outputs.PR_BASE_SHA_BETTER }}
-          echo ${{ needs.get-pr-sha.outputs.PR_MERGE_SHA_BETTER }}
-          echo ${{ needs.get-pr-sha.outputs.PR_BETTER }}
+          echo ${{ needs.get-pr-sha.outputs.PR }}

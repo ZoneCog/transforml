@@ -12,6 +12,13 @@ on:
       PR_MERGE_SHA:
         description: "The extracted PR commit SHA"
         value: ${{ jobs.get-pr-sha.outputs.PR_MERGE_SHA }}
+      PR_HEAD_REF:
+        description: "The extracted PR commit SHA"
+        value: ${{ jobs.get-pr-sha-better.outputs.PR_HEAD_REF }}
+      PR_BASE_REF:
+        description: "The extracted PR commit SHA"
+        value: ${{ jobs.get-pr-sha-better.outputs.PR_BASE_REF }}
+
 
 jobs:
   get-pr-sha:
@@ -47,3 +54,25 @@ jobs:
               echo "Last commit on the pull request is newer than the issue comment triggering this run! Abort!";
               exit -1;
             fi
+
+  get-pr-sha-better:
+    runs-on: ubuntu-22.04
+    name: Get PR commit SHA better
+    outputs:
+      PR_HEAD_REF: ${{ steps.pr_info.outputs.head_ref }}
+      PR_BASE_REF: ${{ steps.pr_info.outputs.base_ref }}
+    if: ${{ inputs.pr_number != '' }}
+    steps:
+      - name: Extract PR details
+        id: pr_info
+        uses: actions/github-script@v6
+        with:
+          script: |            
+            const { data: pr } = await github.rest.pulls.get({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: ${{ inputs.pr_number }}
+            });
+
+            core.setOutput('headRef', pr.head.ref);
+            core.setOutput('baseRef', pr.base.ref);

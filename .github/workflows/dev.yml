@@ -13,3 +13,18 @@ jobs:
     needs: get-pr-number
     steps:
       - run: echo ${{ needs.get-pr-number.outputs.PR_NUMBER }}
+
+  get-pr-sha:
+    name: Get PR number
+    needs: get-pr-number
+    uses: ./.github/workflows/self-get-pr-sha.yml
+    with:
+      pr_number: ${{ needs.get-pr-number.outputs.PR_NUMBER }}
+
+  show-pr-sha:
+    runs-on: ubuntu-latest
+    needs: get-pr-sha
+    steps:
+      - run: |
+          echo ${{ needs.get-pr-sha.outputs.PR_HEAD_SHA }}
+          echo ${{ needs.get-pr-sha.outputs.PR_MERGE_SHA }}

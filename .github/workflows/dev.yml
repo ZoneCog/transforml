@@ -5,7 +5,7 @@ on:
 
 jobs:
   get-pr-number:
-    uses: ./.github/workflows/self-scheduled.yml
+    uses: ./.github/workflows/self-get-pr-number.yml
 
   show-pr-number:
     runs-on: ubuntu-latest

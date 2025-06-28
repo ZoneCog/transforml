@@ -28,3 +28,5 @@ jobs:
       - run: |
           echo ${{ needs.get-pr-sha.outputs.PR_HEAD_SHA }}
           echo ${{ needs.get-pr-sha.outputs.PR_MERGE_SHA }}
+          echo ${{ needs.get-pr-sha.outputs.PR_HEAD_REF }}
+          echo ${{ needs.get-pr-sha.outputs.PR_BASE_REF }}

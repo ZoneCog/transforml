@@ -79,6 +79,7 @@ jobs:
 #      COMMENT_TIMESTAMP: 1751143805
 #      COMMENT_DATE: ${{ github.event.comment.created_at }}
       COMMENT_DATE: 2025-06-28T21:02:16Z
+      PR_MERGE_COMMIT_TIMESTAMP: ${{ needs.get-pr-sha.outputs.PR_MERGE_COMMIT_TIMESTAMP }}
     steps:
       - run: |
           COMMENT_TIMESTAMP=$(date -d "${COMMENT_DATE}" +"%s")

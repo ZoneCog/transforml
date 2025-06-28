@@ -51,6 +51,12 @@ on:
       PR_MERGE_COMMIT_DATE:
         description: "The extracted PR commit SHA"
         value: ${{ jobs.get-pr-sha-better.outputs.PR_MERGE_COMMIT_DATE }}
+      PR_HEAD_COMMIT_TIMESTAMP:
+        description: "The extracted PR commit SHA"
+        value: ${{ jobs.get-pr-sha-better.outputs.PR_HEAD_COMMIT_TIMESTAMP }}
+      PR_MERGE_COMMIT_TIMESTAMP:
+        description: "The extracted PR commit SHA"
+        value: ${{ jobs.get-pr-sha-better.outputs.PR_MERGE_COMMIT_TIMESTAMP }}
       PR:
         description: "The extracted PR commit SHA"
         value: ${{ jobs.get-pr-sha-better.outputs.PR }}
@@ -107,7 +113,6 @@ jobs:
       PR_MERGE_COMMIT_SHA: ${{ steps.pr_info.outputs.merge_commit_sha }}
       PR_HEAD_COMMIT_DATE: ${{ steps.pr_info.outputs.head_commit_date }}
       PR_MERGE_COMMIT_DATE: ${{ steps.pr_info.outputs.merge_commit_date }}
-
       PR: ${{ steps.pr_info.outputs.pr }}
     if: ${{ inputs.pr_number != '' }}
     steps:
@@ -165,9 +170,13 @@ jobs:
       - name: Convert dates to timestamps
         id: get_timestamps
         run: |
-          InputDate=${{ steps.pr_info.outputs.head_commit_date }}
-          echo $InputDate
-          epochDate=$(date -d "$InputDate" +%s)
-          echo $epochDate
-          epochDate2=$(date -u -d "$InputDate" +%s)
-          echo $epochDate2
+          head_commit_date=${{ steps.pr_info.outputs.head_commit_date }}
+          merge_commit_date=${{ steps.pr_info.outputs.merge_commit_date }}
+          echo $head_commit_date
+          echo $merge_commit_date
+          head_commit_timestamp=$(date -d "$head_commit_date" +%s)
+          merge_commit_timestamp=$(date -d "$merge_commit_date" +%s)
+          echo $head_commit_timestamp
+          echo $merge_commit_timestamp
+          echo $PR_HEAD_COMMIT_TIMESTAMP >> $GITHUB_OUTPUT
+          echo $PR_MERGE_COMMIT_TIMESTAMP >> $GITHUB_OUTPUT

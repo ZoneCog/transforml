@@ -113,6 +113,8 @@ jobs:
       PR_MERGE_COMMIT_SHA: ${{ steps.pr_info.outputs.merge_commit_sha }}
       PR_HEAD_COMMIT_DATE: ${{ steps.pr_info.outputs.head_commit_date }}
       PR_MERGE_COMMIT_DATE: ${{ steps.pr_info.outputs.merge_commit_date }}
+      PR_HEAD_COMMIT_TIMESTAMP: ${{ steps.get_timestamps.outputs.head_commit_timestamp }}
+      PR_MERGE_COMMIT_TIMESTAMP: ${{ steps.get_timestamps.outputs.merge_commit_timestamp }}
       PR: ${{ steps.pr_info.outputs.pr }}
     if: ${{ inputs.pr_number != '' }}
     steps:
@@ -178,5 +180,5 @@ jobs:
           merge_commit_timestamp=$(date -d "$merge_commit_date" +%s)
           echo $head_commit_timestamp
           echo $merge_commit_timestamp
-          echo $PR_HEAD_COMMIT_TIMESTAMP >> $GITHUB_OUTPUT
-          echo $PR_MERGE_COMMIT_TIMESTAMP >> $GITHUB_OUTPUT
+          echo $head_commit_timestamp >> $GITHUB_OUTPUT
+          echo $merge_commit_timestamp >> $GITHUB_OUTPUT

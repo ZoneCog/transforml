@@ -133,14 +133,3 @@ jobs:
               repo: pr.head.repo.name,
               ref: pr.head.sha
             })
-            
-#            const merge_commit = await github.rest.repos.getCommit({
-#              owner: pr.base.repo.owner,
-#              repo: pr.base.repo.name,
-#              ref: pr.merge_commit_sha
-#            })
-            
-            console.log('PR Details:', {
-#              merge_commit: merge_commit,
-              head_commit: head_commit
-            });

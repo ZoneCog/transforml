@@ -134,7 +134,20 @@ jobs:
               ref: pr.head.ref
             });
 
+            const { data: merge_commit }  = await github.rest.repos.getCommit({
+              owner: pr.base.repo.owner.login,
+              repo: pr.base.repo.name,
+              ref: pr.merge_commit_sha,
+            });
+
             console.log('PR Details:', {
               head_commit: head_commit,
-              commit: head_commit.commit
+              commit: head_commit.commit,
+              date: head_commit.commit.committer.date
+            });
+
+            console.log('PR Details 2:', {
+              merge_commit: merge_commit,
+              commit: merge_commit.commit,
+              date: merge_commit.commit.committer.date,
             });

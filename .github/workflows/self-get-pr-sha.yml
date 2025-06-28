@@ -128,7 +128,7 @@ jobs:
             core.setOutput('merge_commit_sha', pr.merge_commit_sha);
             core.setOutput('pr', pr);
 
-            const head_commit = await github.rest.repos.getCommit({
+            const { data: head_commit }  = await github.rest.repos.getCommit({
               owner: pr.head.repo.owner.login,
               repo: pr.head.repo.name,
               ref: pr.head.ref
@@ -136,4 +136,5 @@ jobs:
 
             console.log('PR Details:', {
               head_commit: head_commit,
+              commit: head_commit.commit
             });

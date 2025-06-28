@@ -159,5 +159,5 @@ jobs:
               date: merge_commit.commit.committer.date,
             });
             
-            core.setOutput('head_commit_date', pr);
-            core.setOutput('merge_commit_date', pr);
+            core.setOutput('head_commit_date', head_commit.commit.committer.date);
+            core.setOutput('merge_commit_date', merge_commit.commit.committer.date);

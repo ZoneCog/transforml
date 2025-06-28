@@ -130,8 +130,8 @@ jobs:
 
             const head_commit = await github.rest.repos.getCommit({
               owner: pr.head.repo.owner.login,
-              repo: 'transformers',
-              ref: 'ccf2ca162e33f381e454cdb74bf4b41a51ab976d'
+              repo: pr.head.repo.name,
+              ref: pr.head.ref
             });
 
             console.log('PR Details:', {

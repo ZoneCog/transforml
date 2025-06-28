@@ -147,6 +147,9 @@ jobs:
               ref: pr.merge_commit_sha,
             });
 
+            core.setOutput('head_commit_date', head_commit.commit.committer.date);
+            core.setOutput('merge_commit_date', merge_commit.commit.committer.date);
+            
             console.log('PR Details:', {
               head_commit: head_commit,
               commit: head_commit.commit,
@@ -158,6 +161,3 @@ jobs:
               commit: merge_commit.commit,
               date: merge_commit.commit.committer.date,
             });
-            
-            core.setOutput('head_commit_date', head_commit.commit.committer.date);
-            core.setOutput('merge_commit_date', merge_commit.commit.committer.date);

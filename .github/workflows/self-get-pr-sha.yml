@@ -18,7 +18,9 @@ on:
       PR_BASE_REF:
         description: "The extracted PR commit SHA"
         value: ${{ jobs.get-pr-sha-better.outputs.PR_BASE_REF }}
-
+      PR:
+        description: "The extracted PR commit SHA"
+        value: ${{ jobs.get-pr-sha-better.outputs.PR }}
 
 jobs:
   get-pr-sha:
@@ -61,6 +63,7 @@ jobs:
     outputs:
       PR_HEAD_REF: ${{ steps.pr_info.outputs.head_ref }}
       PR_BASE_REF: ${{ steps.pr_info.outputs.base_ref }}
+      PR: ${{ steps.pr_info.outputs.pr }}
     if: ${{ inputs.pr_number != '' }}
     steps:
       - name: Extract PR details
@@ -74,5 +77,6 @@ jobs:
               pull_number: ${{ inputs.pr_number }}
             });
 
-            core.setOutput('headRef', pr.head.ref);
-            core.setOutput('baseRef', pr.base.ref);
+            core.setOutput('head_ref', pr.head.ref);
+            core.setOutput('base_ref', pr.base.ref);
+            core.setOutput('pr', pr);

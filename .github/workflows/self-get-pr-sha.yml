@@ -127,9 +127,3 @@ jobs:
             core.setOutput('base_sha', pr.base.sha);
             core.setOutput('merge_commit_sha', pr.merge_commit_sha);
             core.setOutput('pr', pr);
-
-            const head_commit = await github.rest.repos.getCommit({
-              owner: pr.head.repo.owner,
-              repo: pr.head.repo.name,
-              ref: pr.head.sha
-            })

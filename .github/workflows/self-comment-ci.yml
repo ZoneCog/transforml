@@ -64,7 +64,9 @@ jobs:
           echo ${{ needs.get-pr-sha.outputs.PR_BASE_REF }}
           echo ${{ needs.get-pr-sha.outputs.PR_HEAD_SHA }}
           echo ${{ needs.get-pr-sha.outputs.PR_BASE_SHA }}
-          echo ${{ needs.get-pr-sha.outputs.PR_MERGE_SHA }}
+          echo ${{ needs.get-pr-sha.outputs.PR_MERGE_COMMIT_SHA }}
+          echo ${{ needs.get-pr-sha.outputs.PR_HEAD_COMMIT_DATE }}
+          echo ${{ needs.get-pr-sha.outputs.PR_MERGE_COMMIT_DATE }}
 #          echo ${{ needs.get-pr-sha.outputs.PR }}
 
   # use a python script to handle this complex logic

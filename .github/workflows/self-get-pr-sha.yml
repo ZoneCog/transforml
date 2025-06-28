@@ -18,8 +18,6 @@ on:
       PR_BASE_REPO_FULL_NAME:
         description: "The extracted PR commit SHA"
         value: ${{ jobs.get-pr-sha-better.outputs.PR_BASE_REPO_FULL_NAME }}
-
-
       PR_HEAD_REPO_OWNER:
         description: "The extracted PR commit SHA"
         value: ${{ jobs.get-pr-sha-better.outputs.PR_HEAD_REPO_OWNER }}
@@ -44,9 +42,15 @@ on:
       PR_BASE_SHA:
         description: "The extracted PR commit SHA"
         value: ${{ jobs.get-pr-sha-better.outputs.PR_BASE_SHA }}
-      PR_MERGE_SHA:
+      PR_MERGE_COMMIT_SHA:
         description: "The extracted PR commit SHA"
-        value: ${{ jobs.get-pr-sha-better.outputs.PR_MERGE_SHA }}
+        value: ${{ jobs.get-pr-sha-better.outputs.PR_MERGE_COMMIT_SHA }}
+      PR_HEAD_COMMIT_DATE:
+        description: "The extracted PR commit SHA"
+        value: ${{ jobs.get-pr-sha-better.outputs.PR_HEAD_COMMIT_DATE }}
+      PR_MERGE_COMMIT_DATE:
+        description: "The extracted PR commit SHA"
+        value: ${{ jobs.get-pr-sha-better.outputs.PR_MERGE_COMMIT_DATE }}
       PR:
         description: "The extracted PR commit SHA"
         value: ${{ jobs.get-pr-sha-better.outputs.PR }}
@@ -100,7 +104,10 @@ jobs:
       PR_BASE_REF: ${{ steps.pr_info.outputs.base_ref }}
       PR_HEAD_SHA: ${{ steps.pr_info.outputs.head_sha }}
       PR_BASE_SHA: ${{ steps.pr_info.outputs.base_sha }}
-      PR_MERGE_SHA: ${{ steps.pr_info.outputs.merge_commit_sha }}
+      PR_MERGE_COMMIT_SHA: ${{ steps.pr_info.outputs.merge_commit_sha }}
+      PR_HEAD_COMMIT_DATE: ${{ steps.pr_info.outputs.head_commit_date }}
+      PR_MERGE_COMMIT_DATE: ${{ steps.pr_info.outputs.merge_commit_date }}
+
       PR: ${{ steps.pr_info.outputs.pr }}
     if: ${{ inputs.pr_number != '' }}
     steps:
@@ -151,3 +158,6 @@ jobs:
               commit: merge_commit.commit,
               date: merge_commit.commit.committer.date,
             });
+            
+            core.setOutput('head_commit_date', pr);
+            core.setOutput('merge_commit_date', pr);

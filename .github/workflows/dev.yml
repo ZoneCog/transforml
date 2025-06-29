@@ -85,12 +85,9 @@ jobs:
               owner: ${{ needs.get-pr-sha.outputs.PR_HEAD_REPO_OWNER }},
               repo: ${{ needs.get-pr-sha.outputs.PR_HEAD_REPO_NAME }},
               path: tests/models
-#              ref: ${{ needs.get-pr-sha.outputs.PR_HEAD_SHA }}
             });
 
-#            console.log('PR repo. content:', {
-#              content: repo_content,
-#            });
+
 
       # could we avoid checkout?
       - uses: actions/checkout@v4

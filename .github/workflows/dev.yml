@@ -25,6 +25,8 @@ jobs:
   show-pr-sha:
     runs-on: ubuntu-22.04
     needs: get-pr-sha
+    env:
+      PR_FILES: ${{ needs.get-pr-sha.outputs.PR_FILES }}
     steps:
       - shell: bash
         run: |
@@ -45,7 +47,7 @@ jobs:
           echo ${{ needs.get-pr-sha.outputs.PR_MERGE_COMMIT_DATE }}
           echo ${{ needs.get-pr-sha.outputs.PR_HEAD_COMMIT_TIMESTAMP }}
           echo ${{ needs.get-pr-sha.outputs.PR_MERGE_COMMIT_TIMESTAMP }}
-          echo -e "${{ needs.get-pr-sha.outputs.PR_FILES }}"
+          echo -e "$PR_FILES"
 #          echo ${{ needs.get-pr-sha.outputs.PR }}
 
   verity_pr_commit:

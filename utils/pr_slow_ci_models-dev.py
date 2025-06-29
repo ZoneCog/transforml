@@ -31,4 +31,4 @@ if __name__ == '__main__':
     pr_number = int(pr_number)
 
     get_pr(pr_number)
-    get_pr2(pr_number)
+    get_pr2()

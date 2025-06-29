@@ -1,5 +1,6 @@
 import sys
 import os
+import re
 
 # def get_pr(pr_number):
 #     from github import Github
@@ -32,6 +33,42 @@ def get_pr_files():
 
     print(new_files)
     print(modified_files)
+
+    # models or quantizers
+    file_re_1 = re.compile(r"src/transformers/(models/.*)/modeling_.*\.py")
+    file_re_2 = re.compile(r"src/transformers/(quantizers/quantizer_.*)\.py")
+
+    # tests for models or quantizers
+    file_re_3 = re.compile(r"tests/(models/.*)/test_.*\.py")
+    file_re_4 = re.compile(r"tests/(quantization/.*)/test_.*\.py")
+
+    # directories of models or quantizers
+    file_re_5 = re.compile(r"src/transformers/(models/.*)/.*\.py")
+
+
+    regexes = [file_re_1, file_re_2, file_re_3, file_re_4, file_re_5]
+
+    new_files_to_run = []
+    for new_file in new_files:
+        for regex in regexes:
+            matched = regex.findall(new_file)
+            if len(matched) > 0:
+                item = matched[0]
+                new_files_to_run.append(item)
+                break
+
+    modified_files_to_run = []
+    for modified_file in modified_files:
+        for regex in regexes:
+            matched = regex.findall(modified_file)
+            if len(matched) > 0:
+                item = matched[0]
+                modified_files_to_run.append(item)
+                break
+
+    print(new_files_to_run)
+    print(modified_files_to_run)
+
 
 if __name__ == '__main__':
 

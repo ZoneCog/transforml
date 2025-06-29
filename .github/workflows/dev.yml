@@ -49,7 +49,7 @@ jobs:
           echo ${{ needs.get-pr-sha.outputs.PR_MERGE_COMMIT_TIMESTAMP }}
           echo "$PR_FILES"
           echo "$PR_FILES" > pr_files.txt
-          python -c 'import json; files = json.loads("pr_files.txt"); print(pr_files)'
+          python -c 'import json; files = json.load("pr_files.txt"); print(pr_files)'
 #          echo ${{ needs.get-pr-sha.outputs.PR }}
 
   verity_pr_commit:

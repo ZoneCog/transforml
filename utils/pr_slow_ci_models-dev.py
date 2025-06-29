@@ -120,24 +120,35 @@ if __name__ == '__main__':
     # pr_number = int(pr_number)
     # get_pr2(pr_number)
 
-    # get file information without checkout
-    pr_number = "39100"
-    pr_sha = "d213aefed5922956a92d47d5f1bc806a562936cf"
-    pr_sha = "7e6427d2091156aa0c02a31efc55744046cf85ac"
-
-    # use `refs/pull/39100/head` is not good!
-    # but if we want to use sha value, it has to be `OWNER/REPO`
-    url = f"https://api.github.com/repos/huggingface/transformers/contents/tests/quantization?ref={pr_sha}"
-    response = requests.get(url)
-    data = response.json()
-    print(data)
-
-    url = f"https://api.github.com/repos/huggingface/transformers/contents/tests/models?ref={pr_sha}"
-    response = requests.get(url)
-    data = response.json()
-    print(json.dumps(data, indent=4))
+    # # get file information without checkout
+    # pr_number = "39100"
+    # pr_sha = "d213aefed5922956a92d47d5f1bc806a562936cf"
+    # pr_sha = "7e6427d2091156aa0c02a31efc55744046cf85ac"
+    #
+    # # use `refs/pull/39100/head` is not good!
+    # # but if we want to use sha value, it has to be `OWNER/REPO`
+    # url = f"https://api.github.com/repos/huggingface/transformers/contents/tests/quantization?ref={pr_sha}"
+    # response = requests.get(url)
+    # data = response.json()
+    # print(data)
+    #
+    # url = f"https://api.github.com/repos/huggingface/transformers/contents/tests/models?ref={pr_sha}"
+    # response = requests.get(url)
+    # data = response.json()
+    # print(json.dumps(data, indent=4))
 
     # exit(0)
+
+    import json
+
+    for filename in ["pr_files.txt", "tests_dir.txt", "tests_models_dir.txt", "tests_quantization_dir.txt"]:
+        with open(filename) as fp:
+            data = json.load(fp)
+            data = [{k: v for k, v in item.items() if k in ["filename", "status"]} for item in data]
+            print(data)
+
+    exit(0)
+
 
     parser = argparse.ArgumentParser()
     parser.add_argument("--message", type=str, default="", help="The content of a comment.")
@@ -154,12 +165,3 @@ if __name__ == '__main__':
     # TODO: However, we don't know if the inferred directories in tests/quantization actually exist
     new_files_to_run, modified_files_to_run = get_pr_files()
 
-    # get file information without checkout
-    pr_number = "39100"
-    url = f"https://api.github.com/repos/huggingface/transformers/contents/tests/quantization?ref=refs/pull/{pr_number}/head"
-    response = requests.get(url)
-    data = response.json()
-    print(data)
-
-    # https://api.github.com/repos/huggingface/transformers/contents/tests/quantization?ref=better_workflows
-    # https://api.github.com/repos/huggingface/transformers/contents/tests/quantization?ref=refs/pull/39100/head

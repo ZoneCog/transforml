@@ -119,37 +119,27 @@ jobs:
             core.setOutput('tests_models_dir', tests_models_dir);
             core.setOutput('tests_quantization_dir', tests_quantization_dir);
 
-
-
-
-
       - name: Write file using github-script
         uses: actions/github-script@v7
         with:
           script: |
             const fs = require('fs');
             const path = require('path');
-                        
+
             // Write content to file
-            const content = `${{ steps.repo_content.outputs.tests_dir }}`;
-            
-            fs.writeFileSync('myfile.txt', content);
+            const content = `${{ needs.get-pr-sha.outputs.PR_FILES }}`;            
+            fs.writeFileSync('pr_files.txt', content);
+
+            const content = `${{ steps.repo_content.outputs.tests_dir }}`;            
+            fs.writeFileSync('tests_dir.txt', content);
+
+            const content = `${{ steps.repo_content.outputs.tests_models_dir }}`;            
+            fs.writeFileSync('tests_models_dir.txt', content);
+
+            const content = `${{ steps.repo_content.outputs.tests_quantization_dir }}`;            
+            fs.writeFileSync('tests_quantization_dir.txt', content);
+
             console.log('File written successfully!');
-
-      - name: Show repository contents
-        shell: bash
-        run: |
-          ls -la myfile.txt
-          head -100 myfile.txt
-          tail -100 myfile.txt
-
-      # could we avoid checkout?
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: "0"
-          # TODO: remove this
-          # We don't want to checkout to PR branch!
-          ref: "refs/pull/${{ needs.get-pr-number.outputs.PR_NUMBER }}/merge"
 
 #      # TODO: remove this
 #      - name: Install dependencies
@@ -161,7 +151,6 @@ jobs:
         env:
           PR_FILES: ${{ needs.get-pr-sha.outputs.PR_FILES }}
         run: |
-          echo "$PR_FILES" > pr_files.txt
           python utils/pr_slow_ci_models-dev.py
           
           

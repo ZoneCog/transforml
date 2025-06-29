@@ -144,6 +144,7 @@ jobs:
         run: |
           echo "$CONTENT"
           echo "$CONTENT" > tests_quantization_dir.txt
+          head -100 tests_quantization_dir.txt
 
 
 #      # TODO: remove this

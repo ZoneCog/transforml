@@ -128,8 +128,14 @@ jobs:
 
             // Write content to file
 
-            const content = `${{ steps.repo_content.outputs.tests_models_dir }}`;
-            fs.writeFileSync('tests_models_dir.txt', content);
+            const content1 = `${{ steps.repo_content.outputs.tests_dir }}`;
+            fs.writeFileSync('tests_dir.txt', content1);
+
+            const content2 = `${{ steps.repo_content.outputs.tests_models_dir }}`;
+            fs.writeFileSync('tests_models_dir.txt', content2);
+
+            const content3 = `${{ steps.repo_content.outputs.tests_quantization_dir }}`;
+            fs.writeFileSync('tests_quantization_dir.txt', content3);
 
             console.log('File written successfully!');
 

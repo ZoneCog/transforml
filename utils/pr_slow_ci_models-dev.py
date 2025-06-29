@@ -1,3 +1,5 @@
+import sys
+
 from github import Github
 import os
 
@@ -14,4 +16,8 @@ def get_pr(pr_number):
 
 
 if __name__ == '__main__':
-    get_pr("39100")
+
+    pr_number = "39100"
+    pr_number = int(pr_number)
+
+    get_pr(pr_number)

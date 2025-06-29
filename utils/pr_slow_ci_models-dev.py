@@ -10,3 +10,8 @@ def get_pr(pr_number):
     print(pr)
     for file in pr.get_files():
         print(file)
+
+
+
+if __name__ == '__main__':
+    get_pr("39100")

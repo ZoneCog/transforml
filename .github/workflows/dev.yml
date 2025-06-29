@@ -84,11 +84,11 @@ jobs:
           # We don't want to checkout to PR branch!
           ref: "refs/pull/${{ needs.get-pr-number.outputs.PR_NUMBER }}/merge"
 
-      # TODO: remove this
-      - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install PyGithub
+#      # TODO: remove this
+#      - name: Install dependencies
+#        run: |
+#          python -m pip install --upgrade pip
+#          pip install PyGithub
 
       - name: Run script to get test files to run
         env:

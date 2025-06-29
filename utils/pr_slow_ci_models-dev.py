@@ -20,8 +20,9 @@ def get_pr2():
 
     import json
     fp = open("pr_files.txt")
-    files = json.load(fp); fp.close()
-    files = [{k: v for k, v in item.items() if k in ["filename", "status"]} for item in files];print(json.dumps(files, indent=4))
+    files = json.load(fp)
+    fp.close()
+    files = [{k: v for k, v in item.items() if k in ["filename", "status"]} for item in files]
     print(files)
 
 

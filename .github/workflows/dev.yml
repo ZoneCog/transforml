@@ -77,20 +77,58 @@ jobs:
     runs-on: ubuntu-22.04
     needs: [get-pr-number, get-pr-sha]
     steps:
-      - name: Extract PR details
+      - name: Get repository content
+        id: repo_content
         uses: actions/github-script@v6
         with:
-          script: |            
-            const { data: repo_content } = await github.rest.repos.getContent({
+          script: |
+            const { data: tests_dir } = await github.rest.repos.getContent({
               owner: '${{ needs.get-pr-sha.outputs.PR_HEAD_REPO_OWNER }}',
               repo: '${{ needs.get-pr-sha.outputs.PR_HEAD_REPO_NAME }}',
               path: 'tests/models',
               ref: '${{ needs.get-pr-sha.outputs.PR_HEAD_SHA }}',
             });
 
-            console.log('PR repo. content:', {
-              content: repo_content,
+            const { data: tests_models_dir } = await github.rest.repos.getContent({
+              owner: '${{ needs.get-pr-sha.outputs.PR_HEAD_REPO_OWNER }}',
+              repo: '${{ needs.get-pr-sha.outputs.PR_HEAD_REPO_NAME }}',
+              path: 'tests/models',
+              ref: '${{ needs.get-pr-sha.outputs.PR_HEAD_SHA }}',
             });
+
+            const { data: tests_quantization_dir } = await github.rest.repos.getContent({
+              owner: '${{ needs.get-pr-sha.outputs.PR_HEAD_REPO_OWNER }}',
+              repo: '${{ needs.get-pr-sha.outputs.PR_HEAD_REPO_NAME }}',
+              path: 'tests/quantization',
+              ref: '${{ needs.get-pr-sha.outputs.PR_HEAD_SHA }}',
+            });
+
+            console.log('tests directory:', {
+              content: tests_dir,
+            });
+
+            console.log('tests/models directory:', {
+              content: tests_models_dir,
+            });
+
+            console.log('tests/quantization directory:', {
+              content: tests_quantization_dir,
+            });
+
+            core.setOutput('tests_dir', tests_dir);
+            core.setOutput('tests_models_dir', tests_models_dir);
+            core.setOutput('tests_quantization_dir', tests_quantization_dir);
+
+      - name: Show repository contents
+        shell: bash
+        env:
+          tests_dir: ${{ steps.repo_content.outputs.tests_dir }}
+          tests_models_dir: ${{ steps.repo_content.outputs.tests_models_dir }}
+          tests_quantization_dir: ${{ steps.repo_content.outputs.tests_quantization_dir }}
+        run: |
+          echo -e "$tests_dir"
+          echo -e "$tests_models_dir"
+          echo -e "$tests_quantization_dir"
 
       # could we avoid checkout?
       - uses: actions/checkout@v4

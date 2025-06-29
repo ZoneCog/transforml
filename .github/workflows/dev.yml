@@ -130,12 +130,6 @@ jobs:
             const content = `${{ needs.get-pr-sha.outputs.PR_FILES }}`;            
             fs.writeFileSync('pr_files.txt', content);
 
-            const content = `${{ steps.repo_content.outputs.tests_dir }}`;            
-            fs.writeFileSync('tests_dir.txt', content);
-
-            const content = `${{ steps.repo_content.outputs.tests_quantization_dir }}`;            
-            fs.writeFileSync('tests_quantization_dir.txt', content);
-
             console.log('File written successfully!');
 
 #      # TODO: remove this

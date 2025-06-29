@@ -127,8 +127,8 @@ jobs:
             const path = require('path');
 
             // Write content to file
-            const content = `${{ needs.get-pr-sha.outputs.PR_FILES }}`;            
-            fs.writeFileSync('pr_files.txt', content);
+            const content = `${{ steps.repo_content.outputs.tests_dir }}`;
+            fs.writeFileSync('myfile.txt', content);
 
             console.log('File written successfully!');
 

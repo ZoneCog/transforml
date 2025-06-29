@@ -60,6 +60,9 @@ on:
       PR:
         description: "The extracted PR commit SHA"
         value: ${{ jobs.get-pr-sha-better.outputs.PR }}
+      PR_FILES:
+        description: "The extracted PR commit SHA"
+        value: ${{ jobs.get-pr-sha-better.outputs.PR_FILES }}
 
 jobs:
   get-pr-sha:
@@ -116,6 +119,7 @@ jobs:
       PR_HEAD_COMMIT_TIMESTAMP: ${{ steps.get_timestamps.outputs.head_commit_timestamp }}
       PR_MERGE_COMMIT_TIMESTAMP: ${{ steps.get_timestamps.outputs.merge_commit_timestamp }}
       PR: ${{ steps.pr_info.outputs.pr }}
+      PR_FILES: ${{ steps.pr_info.outputs.files }}
     if: ${{ inputs.pr_number != '' }}
     steps:
       - name: Extract PR details
@@ -169,11 +173,13 @@ jobs:
               date: merge_commit.commit.committer.date
             });
 
-            const { data: pr_files } = await github.rest.pulls.listFiles({
+            const { data: files } = await github.rest.pulls.listFiles({
               owner: context.repo.owner,
               repo: context.repo.repo,
               pull_number: ${{ inputs.pr_number }}
             });
+
+            core.setOutput('files', files);
             
             console.log('PR Details 3:', {
               pr_files: pr_files,

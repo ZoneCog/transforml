@@ -56,7 +56,7 @@ def get_pr_files():
             matched = regex.findall(new_file)
             if len(matched) > 0:
                 item = matched[0]
-                item.replace("quantizers/quantizer_", "quantization/")
+                item = item.replace("quantizers/quantizer_", "quantization/")
                 new_files_to_run.append(item)
                 break
 
@@ -66,7 +66,7 @@ def get_pr_files():
             matched = regex.findall(modified_file)
             if len(matched) > 0:
                 item = matched[0]
-                item.replace("quantizers/quantizer_", "quantization/")
+                item = item.replace("quantizers/quantizer_", "quantization/")
                 modified_files_to_run.append(item)
                 break
 

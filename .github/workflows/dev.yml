@@ -119,6 +119,16 @@ jobs:
             core.setOutput('tests_models_dir', tests_models_dir);
             core.setOutput('tests_quantization_dir', tests_quantization_dir);
 
+
+
+      # could we avoid checkout?
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: "0"
+          # TODO: remove this
+          # We don't want to checkout to PR branch!
+          ref: "refs/pull/${{ needs.get-pr-number.outputs.PR_NUMBER }}/merge"
+
       - name: Write tests_dir file
         env:
           CONTENT: ${{ steps.repo_content.outputs.tests_dir }}
@@ -135,13 +145,6 @@ jobs:
           CONTENT: ${{ steps.repo_content.outputs.tests_quantization_dir }}
         run: echo "$CONTENT" > tests_quantization_dir.txt
 
-      # could we avoid checkout?
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: "0"
-          # TODO: remove this
-          # We don't want to checkout to PR branch!
-          ref: "refs/pull/${{ needs.get-pr-number.outputs.PR_NUMBER }}/merge"
 
 #      # TODO: remove this
 #      - name: Install dependencies

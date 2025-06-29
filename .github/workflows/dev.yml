@@ -124,19 +124,11 @@ jobs:
           CONTENT: ${{ steps.repo_content.outputs.tests_dir }}
         run: echo "$CONTENT" > tests_dir.txt
 
-      - name: Write tests_models_dir file (using github-script)
-        uses: actions/github-script@v7
-        env:
-          TESTS_MODELS_DIR: ${{ steps.repo_content.outputs.tests_models_dir }}
-        with:
-          script: |
-            const fs = require('fs');
-            const path = require('path');
-
-            // Write content to file
-            fs.writeFileSync('tests_models_dir.txt', process.env.TESTS_MODELS_DIR);
-
-            console.log('File written successfully!');
+      - name: Write tests_models_dir file
+        run: |
+          cat > tests_models_dir.txt << 'EOF'
+          ${{ steps.repo_content.outputs.tests_models_dir }}
+          EOF
 
       - name: Write tests_quantization_dir file
         env:

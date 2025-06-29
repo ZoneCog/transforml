@@ -84,7 +84,8 @@ jobs:
             const { data: repo_content } = await github.rest.repos.getContent({
               owner: '${{ needs.get-pr-sha.outputs.PR_HEAD_REPO_OWNER }}',
               repo: '${{ needs.get-pr-sha.outputs.PR_HEAD_REPO_NAME }}',
-              path: 'tests/models'
+              path: 'tests/models',
+              ref: '${{ needs.get-pr-sha.outputs.PR_HEAD_SHA }}',
             });
 
             console.log('PR repo. content:', {

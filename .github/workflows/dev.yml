@@ -119,24 +119,20 @@ jobs:
             core.setOutput('tests_models_dir', tests_models_dir);
             core.setOutput('tests_quantization_dir', tests_quantization_dir);
 
-      - name: Write file using github-script
-        uses: actions/github-script@v7
+      - name: Write tests_dir file
         env:
-          TESTS_DIR: ${{ steps.repo_content.outputs.tests_dir }}
-          TESTS_MODELS_DIR: ${{ steps.repo_content.outputs.tests_models_dir }}
-          TESTS_QUANTIZATION_DIR: ${{ steps.repo_content.outputs.tests_quantization_dir }}
-        with:
-          script: |
-            const fs = require('fs');
-            const path = require('path');
+          CONTENT: ${{ steps.repo_content.outputs.tests_dir }}
+        run: echo "$CONTENT" > tests_dir.txt
 
-            // Write content to file
+      - name: Write tests_models_dir file
+        env:
+          CONTENT: ${{ steps.repo_content.outputs.tests_models_dir }}
+        run: echo "$CONTENT" > tests_models_dir.txt
 
-            fs.writeFileSync('tests_dir.txt', process.env.TESTS_DIR);
-            fs.writeFileSync('tests_models_dir.txt', process.env.TESTS_MODELS_DIR);
-            fs.writeFileSync('tests_quantization_dir.txt', process.env.TESTS_QUANTIZATION_DIR);
-
-            console.log('File written successfully!');
+      - name: Write tests_quantization_dir file
+        env:
+          CONTENT: ${{ steps.repo_content.outputs.tests_quantization_dir }}
+        run: echo "$CONTENT" > tests_quantization_dir.txt
 
 #      # TODO: remove this
 #      - name: Install dependencies

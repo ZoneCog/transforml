@@ -97,7 +97,7 @@ jobs:
   # case 2: `run-slow model_1, model_2`
   get-tests:
     runs-on: ubuntu-22.04
-    needs: [get-pr-number, get-sha]
+    needs: [get-pr-number, get-pr-sha]
     if: ${{ needs.get-pr-number.outputs.PR_NUMBER != ''}}
     outputs:
       models: ${{ steps.models_to_run.outputs.models }}
@@ -110,7 +110,7 @@ jobs:
 
       - name: Verify merge commit SHA
         env:
-          VERIFIED_PR_MERGE_SHA: ${{ needs.get-sha.outputs.PR_MERGE_SHA }}
+          VERIFIED_PR_MERGE_SHA: ${{ needs.get-pr-sha.outputs.PR_MERGE_SHA }}
         run: |
             PR_MERGE_SHA=$(git log -1 --format=%H)
             if [ $PR_MERGE_SHA != $VERIFIED_PR_MERGE_SHA ]; then
@@ -118,6 +118,7 @@ jobs:
               exit -1;
             fi
 
+      # Do we really need to checkout? The script can take a list of files and output the desired list, right?
       - name: Get models to test
         env:
           PR_COMMENT: ${{ github.event.comment.body }}

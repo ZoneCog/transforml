@@ -126,9 +126,9 @@ jobs:
           tests_models_dir: ${{ steps.repo_content.outputs.tests_models_dir }}
           tests_quantization_dir: ${{ steps.repo_content.outputs.tests_quantization_dir }}
         run: |
-          echo -e "$tests_dir"
-          echo -e "$tests_quantization_dir"
-          echo -e "$tests_models_dir"
+          echo "$tests_dir" > tests_dir.txt
+          echo "$tests_models_dir" > tests_models_dir.txt
+          echo "$tests_models_dir" > tests_quantization_dir.txt
 
       # could we avoid checkout?
       - uses: actions/checkout@v4

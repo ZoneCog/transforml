@@ -77,6 +77,22 @@ jobs:
     runs-on: ubuntu-22.04
     needs: [get-pr-number, get-pr-sha]
     steps:
+      - name: Extract PR details
+        uses: actions/github-script@v6
+        with:
+          script: |            
+            const { data: repo_content } = await github.rest.repos.getContent({
+              owner: ${{ needs.get-pr-sha.outputs.PR_HEAD_REPO_OWNER }},
+              repo: ${{ needs.get-pr-sha.outputs.PR_HEAD_REPO_NAME }},
+              path: 'tests/models',
+              ref: ${{ needs.get-pr-sha.outputs.PR_HEAD_SHA }}
+            });
+
+            console.log('PR repo. content:', {
+              content: repo_content,
+            });
+
+      # could we avoid checkout?
       - uses: actions/checkout@v4
         with:
           fetch-depth: "0"

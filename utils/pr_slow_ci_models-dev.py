@@ -1,3 +1,7 @@
+import argparse
+import json
+
+import requests
 import sys
 import os
 import re
@@ -76,11 +80,86 @@ def get_pr_files():
     print(new_files_to_run)
     print(modified_files_to_run)
 
+    return new_files_to_run, modified_files_to_run
+
+
+def parse_message(message: str) -> str:
+    """
+    Parses a GitHub pull request's comment to find the models specified in it to run slow CI.
+
+    Args:
+        message (`str`): The body of a GitHub pull request's comment.
+
+    Returns:
+        `str`: The substring in `message` after `run-slow`, run_slow` or run slow`. If no such prefix is found, the
+        empty string is returned.
+    """
+    if message is None:
+        return ""
+
+    message = message.strip().lower()
+
+    # run-slow: model_1, model_2, quantization_1, quantization_2
+    if not message.startswith(("run-slow", "run_slow", "run slow")):
+        return ""
+    message = message[len("run slow") :]
+    # remove leading `:`
+    while message.strip().startswith(":"):
+        message = message.strip()[1:]
+
+    return message
+
+
+def get_models(message: str):
+    models = parse_message(message)
+    return models.replace(",", " ").split()
+
 
 if __name__ == '__main__':
-
     # pr_number = "39100"
     # pr_number = int(pr_number)
     # get_pr2(pr_number)
 
-    get_pr_files()
+    # get file information without checkout
+    pr_number = "39100"
+    pr_sha = "d213aefed5922956a92d47d5f1bc806a562936cf"
+    pr_sha = "7e6427d2091156aa0c02a31efc55744046cf85ac"
+
+    # use `refs/pull/39100/head` is not good!
+    # but if we want to use sha value, it has to be `OWNER/REPO`
+    url = f"https://api.github.com/repos/huggingface/transformers/contents/tests/quantization?ref={pr_sha}"
+    response = requests.get(url)
+    data = response.json()
+    print(data)
+
+    url = f"https://api.github.com/repos/huggingface/transformers/contents/tests/models?ref={pr_sha}"
+    response = requests.get(url)
+    data = response.json()
+    print(json.dumps(data, indent=4))
+
+    # exit(0)
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--message", type=str, default="", help="The content of a comment.")
+    args = parser.parse_args()
+
+    # These don't have the prefix `models/` or `quantization/`, so we need to add them.
+    # At this moment, we don't know if they are in tests/models or in tests/quantization, or if they even exist
+    specified_models = []
+    if args.message:
+        specified_models = get_models(args.message)
+
+    # Computed from the changed files.
+    # These are already with the prefix `models/` or `quantization/`, so we don't need to add them.
+    # TODO: However, we don't know if the inferred directories in tests/quantization actually exist
+    new_files_to_run, modified_files_to_run = get_pr_files()
+
+    # get file information without checkout
+    pr_number = "39100"
+    url = f"https://api.github.com/repos/huggingface/transformers/contents/tests/quantization?ref=refs/pull/{pr_number}/head"
+    response = requests.get(url)
+    data = response.json()
+    print(data)
+
+    # https://api.github.com/repos/huggingface/transformers/contents/tests/quantization?ref=better_workflows
+    # https://api.github.com/repos/huggingface/transformers/contents/tests/quantization?ref=refs/pull/39100/head

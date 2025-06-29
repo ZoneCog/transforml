@@ -85,7 +85,7 @@ jobs:
             const { data: tests_dir } = await github.rest.repos.getContent({
               owner: '${{ needs.get-pr-sha.outputs.PR_HEAD_REPO_OWNER }}',
               repo: '${{ needs.get-pr-sha.outputs.PR_HEAD_REPO_NAME }}',
-              path: 'tests/models',
+              path: 'tests',
               ref: '${{ needs.get-pr-sha.outputs.PR_HEAD_SHA }}',
             });
 
@@ -127,8 +127,8 @@ jobs:
           tests_quantization_dir: ${{ steps.repo_content.outputs.tests_quantization_dir }}
         run: |
           echo -e "$tests_dir"
-          echo -e "$tests_models_dir"
           echo -e "$tests_quantization_dir"
+          echo -e "$tests_models_dir"
 
       # could we avoid checkout?
       - uses: actions/checkout@v4

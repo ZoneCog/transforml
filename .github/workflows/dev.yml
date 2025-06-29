@@ -75,7 +75,7 @@ jobs:
   get-test-files:
     name: Get test files to run
     runs-on: ubuntu-22.04
-    needs: get-pr-number
+    needs: [get-pr-number, get-pr-sha]
     steps:
       - uses: actions/checkout@v4
         with:
@@ -84,18 +84,12 @@ jobs:
           # We don't want to checkout to PR branch!
           ref: "refs/pull/${{ needs.get-pr-number.outputs.PR_NUMBER }}/merge"
 
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.13'
-
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
           pip install PyGithub
 
       - name: Run script to get test files to run
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
+          echo "$PR_FILES" > pr_files.txt
           python utils/pr_slow_ci_models-dev.py

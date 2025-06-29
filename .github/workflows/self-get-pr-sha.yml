@@ -169,6 +169,16 @@ jobs:
               date: merge_commit.commit.committer.date
             });
 
+            const { data: pr_files } = await github.rest.pulls.listFiles({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: ${{ inputs.pr_number }}
+            });
+            
+            console.log('PR Details 3:', {
+              pr_files: pr_files,
+            });
+
       - name: Convert dates to timestamps
         id: get_timestamps
         run: |

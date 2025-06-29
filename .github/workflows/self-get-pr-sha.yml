@@ -182,7 +182,7 @@ jobs:
             core.setOutput('files', files);
             
             console.log('PR Details 3:', {
-              pr_files: pr_files,
+              files: files,
             });
 
       - name: Convert dates to timestamps

@@ -121,6 +121,10 @@ jobs:
 
       - name: Write file using github-script
         uses: actions/github-script@v7
+        env:
+          TESTS_DIR: ${{ steps.repo_content.outputs.tests_dir }}
+          TESTS_MODELS_DIR: ${{ steps.repo_content.outputs.tests_models_dir }}
+          TESTS_QUANTIZATION_DIR: ${{ steps.repo_content.outputs.tests_quantization_dir }}
         with:
           script: |
             const fs = require('fs');
@@ -128,14 +132,9 @@ jobs:
 
             // Write content to file
 
-            const content1 = `${{ steps.repo_content.outputs.tests_dir }}`;
-            fs.writeFileSync('tests_dir.txt', content1);
-
-            const content2 = `${{ steps.repo_content.outputs.tests_models_dir }}`;
-            fs.writeFileSync('tests_models_dir.txt', content2);
-
-            const content3 = `${{ steps.repo_content.outputs.tests_quantization_dir }}`;
-            fs.writeFileSync('tests_quantization_dir.txt', content3);
+            fs.writeFileSync('tests_dir.txt', process.env.TESTS_DIR);
+            fs.writeFileSync('tests_models_dir.txt', process.env.TESTS_MODELS_DIR);
+            fs.writeFileSync('tests_quantization_dir.txt', process.env.TESTS_QUANTIZATION_DIR);
 
             console.log('File written successfully!');
 

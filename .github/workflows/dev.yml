@@ -26,7 +26,8 @@ jobs:
     runs-on: ubuntu-22.04
     needs: get-pr-sha
     steps:
-      - run: |
+      - shell: bash
+        run: |
           echo ${{ needs.get-pr-sha.outputs.PR_HEAD_SHA_BAD }}
           echo ${{ needs.get-pr-sha.outputs.PR_MERGE_SHA_BAD }}
           echo ${{ needs.get-pr-sha.outputs.PR_HEAD_REPO_FULL_NAME }}

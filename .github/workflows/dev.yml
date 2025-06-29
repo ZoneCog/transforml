@@ -142,10 +142,7 @@ jobs:
         env:
           CONTENT: ${{ steps.repo_content.outputs.tests_quantization_dir }}
         run: |
-          echo "$CONTENT"
           echo "$CONTENT" > tests_quantization_dir.txt
-          head -100 tests_quantization_dir.txt
-
 
 #      # TODO: remove this
 #      - name: Install dependencies

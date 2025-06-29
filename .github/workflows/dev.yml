@@ -122,8 +122,6 @@ jobs:
       - name: Show repository contents
         shell: bash
         env:
-          tests_dir: ${{ steps.repo_content.outputs.tests_dir }}
-          tests_models_dir: ${{ steps.repo_content.outputs.tests_models_dir }}
           tests_quantization_dir: ${{ steps.repo_content.outputs.tests_quantization_dir }}
         # echo "$tests_quantization_dir" > tests_quantization_dir.txt
         run: |

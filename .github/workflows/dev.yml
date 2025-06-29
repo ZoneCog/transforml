@@ -131,7 +131,7 @@ jobs:
             const path = require('path');
                         
             // Write content to file
-            const content = "${{ steps.repo_content.outputs.tests_dir }}";
+            const content = `${{ steps.repo_content.outputs.tests_dir }}`;
             
             fs.writeFileSync('myfile.txt', content);
             console.log('File written successfully!');

@@ -133,8 +133,8 @@ jobs:
             const content = `${{ steps.repo_content.outputs.tests_dir }}`;            
             fs.writeFileSync('tests_dir.txt', content);
 
-            const content = `${{ steps.repo_content.outputs.tests_models_dir }}`;            
-            fs.writeFileSync('tests_models_dir.txt', content);
+#            const content = `${{ steps.repo_content.outputs.tests_models_dir }}`;
+#            fs.writeFileSync('tests_models_dir.txt', content);
 
             const content = `${{ steps.repo_content.outputs.tests_quantization_dir }}`;            
             fs.writeFileSync('tests_quantization_dir.txt', content);

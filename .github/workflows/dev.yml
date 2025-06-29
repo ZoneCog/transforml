@@ -128,8 +128,8 @@ jobs:
         # echo "$tests_quantization_dir" > tests_quantization_dir.txt
         run: |
           python -c 'import os; fp = open("tests_quantization_dir.txt", "w"); fp.write(os.environ.get("tests_quantization_dir")); fp.close(); print(os.environ.get("tests_quantization_dir"))'
-          head -100 tests_quantization_dir.txt
-          tail -100 tests_quantization_dir.txt
+#          head -100 tests_quantization_dir.txt
+#          tail -100 tests_quantization_dir.txt
       # could we avoid checkout?
       - uses: actions/checkout@v4
         with:

@@ -119,8 +119,6 @@ jobs:
             core.setOutput('tests_models_dir', tests_models_dir);
             core.setOutput('tests_quantization_dir', tests_quantization_dir);
 
-
-
       # could we avoid checkout?
       - uses: actions/checkout@v4
         with:
@@ -143,7 +141,9 @@ jobs:
       - name: Write tests_quantization_dir file
         env:
           CONTENT: ${{ steps.repo_content.outputs.tests_quantization_dir }}
-        run: echo "$CONTENT" > tests_quantization_dir.txt
+        run: |
+          echo "$CONTENT"
+          echo "$CONTENT" > tests_quantization_dir.txt
 
 
 #      # TODO: remove this

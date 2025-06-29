@@ -36,6 +36,8 @@ def get_pr_files():
 
     # models or quantizers
     file_re_1 = re.compile(r"src/transformers/(models/.*)/modeling_.*\.py")
+
+    # Unfortunately, there is no proper way to map this to quantization tests.
     file_re_2 = re.compile(r"src/transformers/(quantizers/quantizer_.*)\.py")
 
     # tests for models or quantizers
@@ -54,6 +56,7 @@ def get_pr_files():
             matched = regex.findall(new_file)
             if len(matched) > 0:
                 item = matched[0]
+                item.replace("quantizers/quantizer_", "quantization/")
                 new_files_to_run.append(item)
                 break
 
@@ -65,6 +68,9 @@ def get_pr_files():
                 item = matched[0]
                 modified_files_to_run.append(item)
                 break
+
+    new_files_to_run = sorted(set(new_files_to_run))
+    modified_files_to_run = sorted(set(modified_files_to_run))
 
     print(new_files_to_run)
     print(modified_files_to_run)

@@ -12,6 +12,8 @@ def get_pr(pr_number):
     print(pr)
     for file in pr.get_files():
         print(file)
+        print(file.filename)
+        print(file.status)
 
 
 

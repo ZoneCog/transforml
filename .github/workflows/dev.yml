@@ -87,7 +87,9 @@ jobs:
               path: 'tests/models'
             });
 
-
+            console.log('PR repo. content:', {
+              content: repo_content,
+            });
 
       # could we avoid checkout?
       - uses: actions/checkout@v4

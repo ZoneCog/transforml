@@ -48,7 +48,6 @@ def get_pr_files():
     # directories of models or quantizers
     file_re_5 = re.compile(r"src/transformers/(models/.*)/.*\.py")
 
-
     regexes = [file_re_1, file_re_2, file_re_3, file_re_4, file_re_5]
 
     new_files_to_run = []
@@ -58,7 +57,9 @@ def get_pr_files():
             if len(matched) > 0:
                 item = matched[0]
                 item = item.replace("quantizers/quantizer_", "quantization/")
-                new_files_to_run.append(item)
+                # TODO: what if not
+                if item in content:
+                    new_files_to_run.append(item)
                 break
 
     modified_files_to_run = []
@@ -68,7 +69,9 @@ def get_pr_files():
             if len(matched) > 0:
                 item = matched[0]
                 item = item.replace("quantizers/quantizer_", "quantization/")
-                modified_files_to_run.append(item)
+                # TODO: what if not
+                if item in content:
+                    modified_files_to_run.append(item)
                 break
 
     new_files_to_run = sorted(set(new_files_to_run))
@@ -136,6 +139,7 @@ if __name__ == '__main__':
 
     # exit(0)
 
+    # specific to this script and action
     content = []
     for filename in ["tests_dir.txt", "tests_models_dir.txt", "tests_quantization_dir.txt"]:
         with open(filename) as fp:

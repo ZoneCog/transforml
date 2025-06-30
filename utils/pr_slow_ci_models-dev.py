@@ -136,15 +136,14 @@ if __name__ == '__main__':
 
     # exit(0)
 
-    repo_content = {}
+    content = []
     for filename in ["tests_dir.txt", "tests_models_dir.txt", "tests_quantization_dir.txt"]:
         with open(filename) as fp:
             data = json.load(fp)
-            data = [item["name"] for item in data]
-            name = filename.replace("_dir.txt", "")
-            repo_content[name] = data
+            data = [item["path"][len("tests/"):] for item in data if item["type"] == "dir"]
+            content.extend(data)
             print(data)
-
+    print(content)
 
     parser = argparse.ArgumentParser()
     parser.add_argument("--message", type=str, default="", help="The content of a comment.")

@@ -1,6 +1,5 @@
 import argparse
 import json
-
 import requests
 import sys
 import os
@@ -22,12 +21,10 @@ import re
 
 def get_pr_files():
 
-    import json
-    fp = open("pr_files.txt")
-    files = json.load(fp)
-    fp.close()
-    files = [{k: v for k, v in item.items() if k in ["filename", "status"]} for item in files]
-    print(files)
+    with open("pr_files.txt") as fp:
+        files = json.load(fp)
+        files = [{k: v for k, v in item.items() if k in ["filename", "status"]} for item in files]
+        print(files)
 
     # TODO: get directories under `(tests/)models/xxx`, `(tests/)models/quantization` and `(tests/)xxx`
     # GOAL: get new modeling files / get list of test files to suggest to run / match a list of specified items to run
@@ -139,20 +136,14 @@ if __name__ == '__main__':
 
     # exit(0)
 
-    import json
-
-    for filename in ["pr_files.txt", "tests_dir.txt", "tests_models_dir.txt", "tests_quantization_dir.txt"]:
+    repo_content = {}
+    for filename in ["tests_dir.txt", "tests_models_dir.txt", "tests_quantization_dir.txt"]:
         with open(filename) as fp:
             data = json.load(fp)
-
-            if filename == "pr_files.txt":
-                data = [{k: v for k, v in item.items() if k in ["filename", "status"]} for item in data]
-            else:
-                data = [item["name"] for item in data]
-
+            data = [item["name"] for item in data]
+            name = filename.replace("_dir.txt", "")
+            repo_content[name] = data
             print(data)
-
-    exit(0)
 
 
     parser = argparse.ArgumentParser()
@@ -169,4 +160,3 @@ if __name__ == '__main__':
     # These are already with the prefix `models/` or `quantization/`, so we don't need to add them.
     # TODO: However, we don't know if the inferred directories in tests/quantization actually exist
     new_files_to_run, modified_files_to_run = get_pr_files()
-

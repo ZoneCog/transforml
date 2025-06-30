@@ -107,8 +107,6 @@ if __name__ == '__main__':
             data = json.load(fp)
             data = [item["path"][len("tests/"):] for item in data if item["type"] == "dir"]
             content.extend(data)
-            print(data)
-    print(content)
 
     parser = argparse.ArgumentParser()
     parser.add_argument("--message", type=str, default="", help="The content of a comment.")

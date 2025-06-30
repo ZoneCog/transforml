@@ -5,35 +5,18 @@ import sys
 import os
 import re
 
-# def get_pr(pr_number):
-#     from github import Github
-#
-#     g = Github()
-#     repo = g.get_repo("huggingface/transformers")
-#     pr = repo.get_pull(pr_number)
-#
-#     print(pr)
-#     for file in pr.get_files():
-#         print(file)
-#         print(file.filename)
-#         print(file.status)
-
 
 def get_pr_files():
 
     with open("pr_files.txt") as fp:
         files = json.load(fp)
         files = [{k: v for k, v in item.items() if k in ["filename", "status"]} for item in files]
-        print(files)
 
     # TODO: get directories under `(tests/)models/xxx`, `(tests/)models/quantization` and `(tests/)xxx`
     # GOAL: get new modeling files / get list of test files to suggest to run / match a list of specified items to run
 
     new_files = [item["filename"] for item in files if item["status"] == "added"]
     modified_files = [item["filename"] for item in files if item["status"] == "modified"]
-
-    print(new_files)
-    print(modified_files)
 
     # models or quantizers
     file_re_1 = re.compile(r"src/transformers/(models/.*)/modeling_.*\.py")
@@ -77,9 +60,6 @@ def get_pr_files():
     new_files_to_run = sorted(set(new_files_to_run))
     modified_files_to_run = sorted(set(modified_files_to_run))
 
-    print(new_files_to_run)
-    print(modified_files_to_run)
-
     return new_files_to_run, modified_files_to_run
 
 
@@ -116,28 +96,9 @@ def get_models(message: str):
 
 
 if __name__ == '__main__':
-    # pr_number = "39100"
-    # pr_number = int(pr_number)
-    # get_pr2(pr_number)
 
-    # # get file information without checkout
-    # pr_number = "39100"
-    # pr_sha = "d213aefed5922956a92d47d5f1bc806a562936cf"
-    # pr_sha = "7e6427d2091156aa0c02a31efc55744046cf85ac"
-    #
-    # # use `refs/pull/39100/head` is not good!
-    # # but if we want to use sha value, it has to be `OWNER/REPO`
-    # url = f"https://api.github.com/repos/huggingface/transformers/contents/tests/quantization?ref={pr_sha}"
-    # response = requests.get(url)
-    # data = response.json()
-    # print(data)
-    #
+    # We can also use the following to fetch the information if we don't have them before calling this script.
     # url = f"https://api.github.com/repos/huggingface/transformers/contents/tests/models?ref={pr_sha}"
-    # response = requests.get(url)
-    # data = response.json()
-    # print(json.dumps(data, indent=4))
-
-    # exit(0)
 
     # specific to this script and action
     content = []
@@ -153,13 +114,17 @@ if __name__ == '__main__':
     parser.add_argument("--message", type=str, default="", help="The content of a comment.")
     args = parser.parse_args()
 
+    # Computed from the changed files.
+    # These are already with the prefix `models/` or `quantization/`, so we don't need to add them.
+    new_files_to_run, modified_files_to_run = get_pr_files()
+
+    print(new_files_to_run)
+    print(modified_files_to_run)
+
     # These don't have the prefix `models/` or `quantization/`, so we need to add them.
     # At this moment, we don't know if they are in tests/models or in tests/quantization, or if they even exist
     specified_models = []
     if args.message:
         specified_models = get_models(args.message)
 
-    # Computed from the changed files.
-    # These are already with the prefix `models/` or `quantization/`, so we don't need to add them.
-    # TODO: However, we don't know if the inferred directories in tests/quantization actually exist
-    new_files_to_run, modified_files_to_run = get_pr_files()
+    # add prefix and check the path exists

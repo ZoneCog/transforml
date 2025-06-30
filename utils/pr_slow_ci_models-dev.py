@@ -144,7 +144,12 @@ if __name__ == '__main__':
     for filename in ["pr_files.txt", "tests_dir.txt", "tests_models_dir.txt", "tests_quantization_dir.txt"]:
         with open(filename) as fp:
             data = json.load(fp)
-            # data = [{k: v for k, v in item.items() if k in ["filename", "status"]} for item in data]
+
+            if filename == "pr_files.txt":
+                data = [{k: v for k, v in item.items() if k in ["filename", "status"]} for item in data]
+            else:
+                data = [item["name"] for item in data]
+
             print(data)
 
     exit(0)

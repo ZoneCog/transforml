@@ -119,6 +119,7 @@ jobs:
             core.setOutput('tests_models_dir', tests_models_dir);
             core.setOutput('tests_quantization_dir', tests_quantization_dir);
 
+#      # TODO: remove this
       # could we avoid checkout?
       - uses: actions/checkout@v4
         with:

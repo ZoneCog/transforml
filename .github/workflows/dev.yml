@@ -129,7 +129,7 @@ jobs:
 
       - name: Write pr_files file
         run: |
-          cat > tests_dir.txt << 'EOF'
+          cat > pr_files.txt << 'EOF'
           ${{ needs.get-pr-sha.outputs.PR_FILES }}
           EOF
 

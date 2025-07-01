@@ -6,63 +6,57 @@ on:
         required: true
         type: string
     outputs:
-      PR_HEAD_SHA_BAD:
-        description: "The extracted PR commit SHA"
-        value: ${{ jobs.get-pr-info.outputs.PR_HEAD_SHA_BAD }}
-      PR_MERGE_SHA_BAD:
-        description: "The extracted PR commit SHA"
-        value: ${{ jobs.get-pr-info.outputs.PR_MERGE_SHA_BAD }}
       PR_HEAD_REPO_FULL_NAME:
         description: "The extracted PR commit SHA"
-        value: ${{ jobs.get-pr-info-better.outputs.PR_HEAD_REPO_FULL_NAME }}
+        value: ${{ jobs.get-pr-info.outputs.PR_HEAD_REPO_FULL_NAME }}
       PR_BASE_REPO_FULL_NAME:
         description: "The extracted PR commit SHA"
-        value: ${{ jobs.get-pr-info-better.outputs.PR_BASE_REPO_FULL_NAME }}
+        value: ${{ jobs.get-pr-info.outputs.PR_BASE_REPO_FULL_NAME }}
       PR_HEAD_REPO_OWNER:
         description: "The extracted PR commit SHA"
-        value: ${{ jobs.get-pr-info-better.outputs.PR_HEAD_REPO_OWNER }}
+        value: ${{ jobs.get-pr-info.outputs.PR_HEAD_REPO_OWNER }}
       PR_BASE_REPO_OWNER:
         description: "The extracted PR commit SHA"
-        value: ${{ jobs.get-pr-info-better.outputs.PR_BASE_REPO_OWNER }}
+        value: ${{ jobs.get-pr-info.outputs.PR_BASE_REPO_OWNER }}
       PR_HEAD_REPO_NAME:
         description: "The extracted PR commit SHA"
-        value: ${{ jobs.get-pr-info-better.outputs.PR_HEAD_REPO_NAME }}
+        value: ${{ jobs.get-pr-info.outputs.PR_HEAD_REPO_NAME }}
       PR_BASE_REPO_NAME:
         description: "The extracted PR commit SHA"
-        value: ${{ jobs.get-pr-info-better.outputs.PR_BASE_REPO_NAME }}
+        value: ${{ jobs.get-pr-info.outputs.PR_BASE_REPO_NAME }}
       PR_HEAD_REF:
         description: "The extracted PR commit SHA"
-        value: ${{ jobs.get-pr-info-better.outputs.PR_HEAD_REF }}
+        value: ${{ jobs.get-pr-info.outputs.PR_HEAD_REF }}
       PR_BASE_REF:
         description: "The extracted PR commit SHA"
-        value: ${{ jobs.get-pr-info-better.outputs.PR_BASE_REF }}
+        value: ${{ jobs.get-pr-info.outputs.PR_BASE_REF }}
       PR_HEAD_SHA:
         description: "The extracted PR commit SHA"
-        value: ${{ jobs.get-pr-info-better.outputs.PR_HEAD_SHA }}
+        value: ${{ jobs.get-pr-info.outputs.PR_HEAD_SHA }}
       PR_BASE_SHA:
         description: "The extracted PR commit SHA"
-        value: ${{ jobs.get-pr-info-better.outputs.PR_BASE_SHA }}
+        value: ${{ jobs.get-pr-info.outputs.PR_BASE_SHA }}
       PR_MERGE_COMMIT_SHA:
         description: "The extracted PR commit SHA"
-        value: ${{ jobs.get-pr-info-better.outputs.PR_MERGE_COMMIT_SHA }}
+        value: ${{ jobs.get-pr-info.outputs.PR_MERGE_COMMIT_SHA }}
       PR_HEAD_COMMIT_DATE:
         description: "The extracted PR commit SHA"
-        value: ${{ jobs.get-pr-info-better.outputs.PR_HEAD_COMMIT_DATE }}
+        value: ${{ jobs.get-pr-info.outputs.PR_HEAD_COMMIT_DATE }}
       PR_MERGE_COMMIT_DATE:
         description: "The extracted PR commit SHA"
-        value: ${{ jobs.get-pr-info-better.outputs.PR_MERGE_COMMIT_DATE }}
+        value: ${{ jobs.get-pr-info.outputs.PR_MERGE_COMMIT_DATE }}
       PR_HEAD_COMMIT_TIMESTAMP:
         description: "The extracted PR commit SHA"
-        value: ${{ jobs.get-pr-info-better.outputs.PR_HEAD_COMMIT_TIMESTAMP }}
+        value: ${{ jobs.get-pr-info.outputs.PR_HEAD_COMMIT_TIMESTAMP }}
       PR_MERGE_COMMIT_TIMESTAMP:
         description: "The extracted PR commit SHA"
-        value: ${{ jobs.get-pr-info-better.outputs.PR_MERGE_COMMIT_TIMESTAMP }}
+        value: ${{ jobs.get-pr-info.outputs.PR_MERGE_COMMIT_TIMESTAMP }}
       PR:
         description: "The extracted PR commit SHA"
-        value: ${{ jobs.get-pr-info-better.outputs.PR }}
+        value: ${{ jobs.get-pr-info.outputs.PR }}
       PR_FILES:
         description: "The extracted PR commit SHA"
-        value: ${{ jobs.get-pr-info-better.outputs.PR_FILES }}
+        value: ${{ jobs.get-pr-info.outputs.PR_FILES }}
 
 jobs:
   get-pr-info:

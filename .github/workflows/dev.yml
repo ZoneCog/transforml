@@ -22,16 +22,13 @@ jobs:
     with:
       pr_number: ${{ needs.get-pr-number.outputs.PR_NUMBER }}
 
+  # TODO: remove part of these for security
   show-pr-sha:
     runs-on: ubuntu-22.04
     needs: get-pr-info
-    env:
-      PR_FILES: ${{ needs.get-pr-info.outputs.PR_FILES }}
     steps:
       - shell: bash
         run: |
-          echo ${{ needs.get-pr-info.outputs.PR_HEAD_SHA_BAD }}
-          echo ${{ needs.get-pr-info.outputs.PR_MERGE_SHA_BAD }}
           echo ${{ needs.get-pr-info.outputs.PR_HEAD_REPO_FULL_NAME }}
           echo ${{ needs.get-pr-info.outputs.PR_BASE_REPO_FULL_NAME }}
           echo ${{ needs.get-pr-info.outputs.PR_HEAD_REPO_OWNER }}
@@ -47,7 +44,6 @@ jobs:
           echo ${{ needs.get-pr-info.outputs.PR_MERGE_COMMIT_DATE }}
           echo ${{ needs.get-pr-info.outputs.PR_HEAD_COMMIT_TIMESTAMP }}
           echo ${{ needs.get-pr-info.outputs.PR_MERGE_COMMIT_TIMESTAMP }}
-          echo "$PR_FILES" > pr_files.txt
 
   verity_pr_commit:
     name: Verity PR commit corresponds to a specific event by comparing timestamps
@@ -152,4 +148,4 @@ jobs:
 
       - name: Run script to get test files to run
         run: |
-          python utils/pr_slow_ci_models-dev.py
+          python utils/get_pr_run_slow_jobs.py

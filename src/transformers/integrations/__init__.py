@@ -17,6 +17,17 @@ from ..utils import OptionalDependencyNotAvailable, _LazyModule, is_torch_availa
 
 
 _import_structure = {
+    "anacog": [
+        "ANACOGHub",
+        "create_anacog_system",
+        "get_prime_tensor_shapes",
+        "TensorShape",
+        "CognitiveHypergraph",
+        "MemorySubsystem",
+        "TaskSubsystem",
+        "AIAnalyticsSubsystem",
+        "AutonomousAdaptationSubsystem",
+    ],
     "aqlm": ["replace_with_aqlm_linear"],
     "awq": [
         "fuse_awq_modules",
@@ -156,6 +167,17 @@ else:
     ]
 
 if TYPE_CHECKING:
+    from .anacog import (
+        AIAnalyticsSubsystem,
+        ANACOGHub,
+        AutonomousAdaptationSubsystem,
+        CognitiveHypergraph,
+        MemorySubsystem,
+        TaskSubsystem,
+        TensorShape,
+        create_anacog_system,
+        get_prime_tensor_shapes,
+    )
     from .aqlm import replace_with_aqlm_linear
     from .awq import (
         fuse_awq_modules,

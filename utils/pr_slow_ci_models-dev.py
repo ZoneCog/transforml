@@ -6,61 +6,43 @@ import os
 import re
 
 
-def get_pr_files():
-
+def get_jobs_to_run():
+    # The file `pr_files.txt` contains the information about the files changed in a pull request, and it is prepared by
+    # the caller (using GitHub api).
+    # We can also use the following api to get the information if we don't have them before calling this script.
+    # url = f"https://api.github.com/repos/huggingface/transformers/pulls/PULL_NUMBER/files?ref={pr_sha}"
     with open("pr_files.txt") as fp:
-        files = json.load(fp)
-        files = [{k: v for k, v in item.items() if k in ["filename", "status"]} for item in files]
-
-    # TODO: get directories under `(tests/)models/xxx`, `(tests/)models/quantization` and `(tests/)xxx`
-    # GOAL: get new modeling files / get list of test files to suggest to run / match a list of specified items to run
-
-    new_files = [item["filename"] for item in files if item["status"] == "added"]
-    modified_files = [item["filename"] for item in files if item["status"] == "modified"]
+        pr_files = json.load(fp)
+        pr_files = [{k: v for k, v in item.items() if k in ["filename", "status"]} for item in pr_files]
+    pr_files = [item["filename"] for item in pr_files if item["status"] in ["added", "modified"]]
 
     # models or quantizers
-    file_re_1 = re.compile(r"src/transformers/(models/.*)/modeling_.*\.py")
-
-    # Unfortunately, there is no proper way to map this to quantization tests.
-    file_re_2 = re.compile(r"src/transformers/(quantizers/quantizer_.*)\.py")
+    re_1 = re.compile(r"src/transformers/(models/.*)/modeling_.*\.py")
+    re_2 = re.compile(r"src/transformers/(quantizers/quantizer_.*)\.py")
 
     # tests for models or quantizers
-    file_re_3 = re.compile(r"tests/(models/.*)/test_.*\.py")
-    file_re_4 = re.compile(r"tests/(quantization/.*)/test_.*\.py")
+    re_3 = re.compile(r"tests/(models/.*)/test_.*\.py")
+    re_4 = re.compile(r"tests/(quantization/.*)/test_.*\.py")
 
-    # directories of models or quantizers
-    file_re_5 = re.compile(r"src/transformers/(models/.*)/.*\.py")
+    # files in a model directory but not necessary a modeling file
+    re_5 = re.compile(r"src/transformers/(models/.*)/.*\.py")
 
-    regexes = [file_re_1, file_re_2, file_re_3, file_re_4, file_re_5]
+    regexes = [re_1, re_2, re_3, re_4, re_5]
 
-    new_files_to_run = []
-    for new_file in new_files:
+    jobs_to_run = []
+    for pr_file in pr_files:
         for regex in regexes:
-            matched = regex.findall(new_file)
+            matched = regex.findall(pr_file)
             if len(matched) > 0:
                 item = matched[0]
                 item = item.replace("quantizers/quantizer_", "quantization/")
-                # TODO: what if not
-                if item in content:
-                    new_files_to_run.append(item)
+                # TODO: for files in `quantizers`, the processed item above may not exist. Try using a fuzzy matching
+                if item in repo_content:
+                    jobs_to_run.append(item)
                 break
+    jobs_to_run = sorted(jobs_to_run)
 
-    modified_files_to_run = []
-    for modified_file in modified_files:
-        for regex in regexes:
-            matched = regex.findall(modified_file)
-            if len(matched) > 0:
-                item = matched[0]
-                item = item.replace("quantizers/quantizer_", "quantization/")
-                # TODO: what if not
-                if item in content:
-                    modified_files_to_run.append(item)
-                break
-
-    new_files_to_run = sorted(set(new_files_to_run))
-    modified_files_to_run = sorted(set(modified_files_to_run))
-
-    return new_files_to_run, modified_files_to_run
+    return jobs_to_run
 
 
 def parse_message(message: str) -> str:
@@ -96,36 +78,31 @@ def get_models(message: str):
 
 
 if __name__ == '__main__':
-
-    # We can also use the following to fetch the information if we don't have them before calling this script.
-    # url = f"https://api.github.com/repos/huggingface/transformers/contents/tests/models?ref={pr_sha}"
-
-    # specific to this script and action
-    content = []
-    for filename in ["tests_dir.txt", "tests_models_dir.txt", "tests_quantization_dir.txt"]:
-        with open(filename) as fp:
-            data = json.load(fp)
-            data = [item["path"][len("tests/"):] for item in data if item["type"] == "dir"]
-            content.extend(data)
-
     parser = argparse.ArgumentParser()
     parser.add_argument("--message", type=str, default="", help="The content of a comment.")
     args = parser.parse_args()
-
-    # Computed from the changed files.
-    # These are already with the prefix `models/` or `quantization/`, so we don't need to add them.
-    new_files_to_run, modified_files_to_run = get_pr_files()
-
-    to_run = new_files_to_run + modified_files_to_run
-    to_run = [x.replace("models/", "").replace("quantization/", "") for x in to_run]
-    suggestion = f"run-slow: {' '.join(to_run)}"
-
-    print(suggestion)
 
     # These don't have the prefix `models/` or `quantization/`, so we need to add them.
     # At this moment, we don't know if they are in tests/models or in tests/quantization, or if they even exist
     specified_models = []
     if args.message:
         specified_models = get_models(args.message)
+    else:
+        # The files are prepared by the caller (using GitHub api).
+        # We can also use the following api to get the information if we don't have them before calling this script.
+        # url = f"https://api.github.com/repos/OWNER/REPO/contents/PATH?ref={pr_sha}"
+        # (we avoid to checkout the repository using `actions/checkout` to reduce the run time, but mostly to avoid the potential security issue as much as possible)
+        repo_content = []
+        for filename in ["tests_dir.txt", "tests_models_dir.txt", "tests_quantization_dir.txt"]:
+            with open(filename) as fp:
+                data = json.load(fp)
+                data = [item["path"][len("tests/"):] for item in data if item["type"] == "dir"]
+                repo_content.extend(data)
 
-    # add prefix and check the path exists
+        # Compute (from the added/modified files) the directories under `tests/`, `tests/models/` and `tests/quantization`to run tests.
+        # These are already with the prefix `models/` or `quantization/`, so we don't need to add them.
+        jobs_to_run = get_jobs_to_run()
+        jobs_to_run = [x.replace("models/", "").replace("quantization/", "") for x in jobs_to_run]
+        suggestion = f"run-slow: {' '.join(jobs_to_run)}"
+
+        print(suggestion)

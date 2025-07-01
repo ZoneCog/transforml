@@ -4,6 +4,7 @@ import requests
 import sys
 import os
 import re
+import string
 
 
 def get_jobs_to_run():
@@ -40,7 +41,7 @@ def get_jobs_to_run():
                 if item in repo_content:
                     jobs_to_run.append(item)
                 break
-    jobs_to_run = sorted(jobs_to_run)
+    jobs_to_run = sorted(set(jobs_to_run))
 
     return jobs_to_run
 
@@ -72,9 +73,14 @@ def parse_message(message: str) -> str:
     return message
 
 
-def get_models(message: str):
+def get_jobs(message: str):
     models = parse_message(message)
     return models.replace(",", " ").split()
+
+
+def check_name(model_name: str):
+    allowed = string.ascii_letters + string.digits + "_"
+    return not (model_name.startswith("_") or model_name.endswith("_")) and all(c in allowed for c in model_name)
 
 
 if __name__ == '__main__':
@@ -82,27 +88,43 @@ if __name__ == '__main__':
     parser.add_argument("--message", type=str, default="", help="The content of a comment.")
     args = parser.parse_args()
 
+    # The files are prepared by the caller (using GitHub api).
+    # We can also use the following api to get the information if we don't have them before calling this script.
+    # url = f"https://api.github.com/repos/OWNER/REPO/contents/PATH?ref={pr_sha}"
+    # (we avoid to checkout the repository using `actions/checkout` to reduce the run time, but mostly to avoid the potential security issue as much as possible)
+    repo_content = []
+    for filename in ["tests_dir.txt", "tests_models_dir.txt", "tests_quantization_dir.txt"]:
+        with open(filename) as fp:
+            data = json.load(fp)
+            data = [item["path"][len("tests/"):] for item in data if item["type"] == "dir"]
+            repo_content.extend(data)
+
     # These don't have the prefix `models/` or `quantization/`, so we need to add them.
-    # At this moment, we don't know if they are in tests/models or in tests/quantization, or if they even exist
     specified_models = []
     if args.message:
-        specified_models = get_models(args.message)
-    else:
-        # The files are prepared by the caller (using GitHub api).
-        # We can also use the following api to get the information if we don't have them before calling this script.
-        # url = f"https://api.github.com/repos/OWNER/REPO/contents/PATH?ref={pr_sha}"
-        # (we avoid to checkout the repository using `actions/checkout` to reduce the run time, but mostly to avoid the potential security issue as much as possible)
-        repo_content = []
-        for filename in ["tests_dir.txt", "tests_models_dir.txt", "tests_quantization_dir.txt"]:
-            with open(filename) as fp:
-                data = json.load(fp)
-                data = [item["path"][len("tests/"):] for item in data if item["type"] == "dir"]
-                repo_content.extend(data)
+        specified_jobs = get_jobs(args.message)
+        specified_jobs = [job for job in specified_jobs if check_name(job)]
 
+        # Add prefix (`models/` or `quantization`)
+        jobs_to_run = []
+        for job in specified_jobs:
+            if not args.quantization:
+                if f"models/{job}" in repo_content:
+                    jobs_to_run.append(f"models/{job}")
+                elif job in repo_content and job != "quantization":
+                    jobs_to_run.append(job)
+            elif f"quantization/{job}" in repo_content:
+                jobs_to_run.append(f"quantization/{job}")
+
+        print(sorted(set(jobs_to_run)))
+
+    else:
         # Compute (from the added/modified files) the directories under `tests/`, `tests/models/` and `tests/quantization`to run tests.
         # These are already with the prefix `models/` or `quantization/`, so we don't need to add them.
         jobs_to_run = get_jobs_to_run()
         jobs_to_run = [x.replace("models/", "").replace("quantization/", "") for x in jobs_to_run]
+        jobs_to_run = [job for job in jobs_to_run if check_name(job)]
+
         suggestion = f"run-slow: {' '.join(jobs_to_run)}"
 
         print(suggestion)

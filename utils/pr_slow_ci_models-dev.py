@@ -116,8 +116,11 @@ if __name__ == '__main__':
     # These are already with the prefix `models/` or `quantization/`, so we don't need to add them.
     new_files_to_run, modified_files_to_run = get_pr_files()
 
-    print(new_files_to_run)
-    print(modified_files_to_run)
+    to_run = new_files_to_run + modified_files_to_run
+    to_run = [x.replace("models/", "").replace("quantization/", "") for x in to_run]
+    suggestion = f"run-slow: {' '.join(to_run)}"
+
+    print(suggestion)
 
     # These don't have the prefix `models/` or `quantization/`, so we need to add them.
     # At this moment, we don't know if they are in tests/models or in tests/quantization, or if they even exist

@@ -6,7 +6,7 @@ on:
 jobs:
   get-pr-number:
     name: Get PR number
-    uses: ./.github/workflows/self-get-pr-number.yml
+    uses: ./.github/workflows/get-pr-number.yml
 
   show-pr-number:
     runs-on: ubuntu-22.04
@@ -18,7 +18,7 @@ jobs:
     name: Get PR commit SHA
     needs: get-pr-number
     if: ${{ needs.get-pr-number.outputs.PR_NUMBER != ''}}
-    uses: ./.github/workflows/self-get-pr-info.yml
+    uses: ./.github/workflows/get-pr-info.yml
     with:
       pr_number: ${{ needs.get-pr-number.outputs.PR_NUMBER }}
 

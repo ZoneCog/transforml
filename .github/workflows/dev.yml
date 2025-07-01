@@ -48,8 +48,6 @@ jobs:
           echo ${{ needs.get-pr-sha.outputs.PR_HEAD_COMMIT_TIMESTAMP }}
           echo ${{ needs.get-pr-sha.outputs.PR_MERGE_COMMIT_TIMESTAMP }}
           echo "$PR_FILES" > pr_files.txt
-#          python -c 'import json; fp = open("pr_files.txt"); files = json.load(fp); fp.close(); files = [{k: v for k, v in item.items() if k in ["filename", "status"]} for item in files];print(json.dumps(files, indent=4))'
-#          echo ${{ needs.get-pr-sha.outputs.PR }}
 
   verity_pr_commit:
     name: Verity PR commit corresponds to a specific event by comparing timestamps

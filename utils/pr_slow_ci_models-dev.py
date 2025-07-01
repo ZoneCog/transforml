@@ -86,6 +86,7 @@ def check_name(model_name: str):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument("--message", type=str, default="", help="The content of a comment.")
+    parser.add_argument("--quantization", action="store_true", help="If we collect quantization tests")
     args = parser.parse_args()
 
     # The files are prepared by the caller (using GitHub api).
@@ -100,7 +101,6 @@ if __name__ == '__main__':
             repo_content.extend(data)
 
     # These don't have the prefix `models/` or `quantization/`, so we need to add them.
-    specified_models = []
     if args.message:
         specified_jobs = get_jobs(args.message)
         specified_jobs = [job for job in specified_jobs if check_name(job)]

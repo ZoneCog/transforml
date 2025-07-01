@@ -8,98 +8,64 @@ on:
     outputs:
       PR_HEAD_SHA_BAD:
         description: "The extracted PR commit SHA"
-        value: ${{ jobs.get-pr-sha.outputs.PR_HEAD_SHA_BAD }}
+        value: ${{ jobs.get-pr-info.outputs.PR_HEAD_SHA_BAD }}
       PR_MERGE_SHA_BAD:
         description: "The extracted PR commit SHA"
-        value: ${{ jobs.get-pr-sha.outputs.PR_MERGE_SHA_BAD }}
+        value: ${{ jobs.get-pr-info.outputs.PR_MERGE_SHA_BAD }}
       PR_HEAD_REPO_FULL_NAME:
         description: "The extracted PR commit SHA"
-        value: ${{ jobs.get-pr-sha-better.outputs.PR_HEAD_REPO_FULL_NAME }}
+        value: ${{ jobs.get-pr-info-better.outputs.PR_HEAD_REPO_FULL_NAME }}
       PR_BASE_REPO_FULL_NAME:
         description: "The extracted PR commit SHA"
-        value: ${{ jobs.get-pr-sha-better.outputs.PR_BASE_REPO_FULL_NAME }}
+        value: ${{ jobs.get-pr-info-better.outputs.PR_BASE_REPO_FULL_NAME }}
       PR_HEAD_REPO_OWNER:
         description: "The extracted PR commit SHA"
-        value: ${{ jobs.get-pr-sha-better.outputs.PR_HEAD_REPO_OWNER }}
+        value: ${{ jobs.get-pr-info-better.outputs.PR_HEAD_REPO_OWNER }}
       PR_BASE_REPO_OWNER:
         description: "The extracted PR commit SHA"
-        value: ${{ jobs.get-pr-sha-better.outputs.PR_BASE_REPO_OWNER }}
+        value: ${{ jobs.get-pr-info-better.outputs.PR_BASE_REPO_OWNER }}
       PR_HEAD_REPO_NAME:
         description: "The extracted PR commit SHA"
-        value: ${{ jobs.get-pr-sha-better.outputs.PR_HEAD_REPO_NAME }}
+        value: ${{ jobs.get-pr-info-better.outputs.PR_HEAD_REPO_NAME }}
       PR_BASE_REPO_NAME:
         description: "The extracted PR commit SHA"
-        value: ${{ jobs.get-pr-sha-better.outputs.PR_BASE_REPO_NAME }}
+        value: ${{ jobs.get-pr-info-better.outputs.PR_BASE_REPO_NAME }}
       PR_HEAD_REF:
         description: "The extracted PR commit SHA"
-        value: ${{ jobs.get-pr-sha-better.outputs.PR_HEAD_REF }}
+        value: ${{ jobs.get-pr-info-better.outputs.PR_HEAD_REF }}
       PR_BASE_REF:
         description: "The extracted PR commit SHA"
-        value: ${{ jobs.get-pr-sha-better.outputs.PR_BASE_REF }}
+        value: ${{ jobs.get-pr-info-better.outputs.PR_BASE_REF }}
       PR_HEAD_SHA:
         description: "The extracted PR commit SHA"
-        value: ${{ jobs.get-pr-sha-better.outputs.PR_HEAD_SHA }}
+        value: ${{ jobs.get-pr-info-better.outputs.PR_HEAD_SHA }}
       PR_BASE_SHA:
         description: "The extracted PR commit SHA"
-        value: ${{ jobs.get-pr-sha-better.outputs.PR_BASE_SHA }}
+        value: ${{ jobs.get-pr-info-better.outputs.PR_BASE_SHA }}
       PR_MERGE_COMMIT_SHA:
         description: "The extracted PR commit SHA"
-        value: ${{ jobs.get-pr-sha-better.outputs.PR_MERGE_COMMIT_SHA }}
+        value: ${{ jobs.get-pr-info-better.outputs.PR_MERGE_COMMIT_SHA }}
       PR_HEAD_COMMIT_DATE:
         description: "The extracted PR commit SHA"
-        value: ${{ jobs.get-pr-sha-better.outputs.PR_HEAD_COMMIT_DATE }}
+        value: ${{ jobs.get-pr-info-better.outputs.PR_HEAD_COMMIT_DATE }}
       PR_MERGE_COMMIT_DATE:
         description: "The extracted PR commit SHA"
-        value: ${{ jobs.get-pr-sha-better.outputs.PR_MERGE_COMMIT_DATE }}
+        value: ${{ jobs.get-pr-info-better.outputs.PR_MERGE_COMMIT_DATE }}
       PR_HEAD_COMMIT_TIMESTAMP:
         description: "The extracted PR commit SHA"
-        value: ${{ jobs.get-pr-sha-better.outputs.PR_HEAD_COMMIT_TIMESTAMP }}
+        value: ${{ jobs.get-pr-info-better.outputs.PR_HEAD_COMMIT_TIMESTAMP }}
       PR_MERGE_COMMIT_TIMESTAMP:
         description: "The extracted PR commit SHA"
-        value: ${{ jobs.get-pr-sha-better.outputs.PR_MERGE_COMMIT_TIMESTAMP }}
+        value: ${{ jobs.get-pr-info-better.outputs.PR_MERGE_COMMIT_TIMESTAMP }}
       PR:
         description: "The extracted PR commit SHA"
-        value: ${{ jobs.get-pr-sha-better.outputs.PR }}
+        value: ${{ jobs.get-pr-info-better.outputs.PR }}
       PR_FILES:
         description: "The extracted PR commit SHA"
-        value: ${{ jobs.get-pr-sha-better.outputs.PR_FILES }}
+        value: ${{ jobs.get-pr-info-better.outputs.PR_FILES }}
 
 jobs:
-  get-pr-sha:
-    runs-on: ubuntu-22.04
-    name: Get PR commit SHA
-    outputs:
-      PR_HEAD_SHA_BAD: ${{ steps.get_sha.outputs.PR_HEAD_SHA }}
-      PR_MERGE_SHA_BAD: ${{ steps.get_sha.outputs.PR_MERGE_SHA }}
-    if: ${{ inputs.pr_number != '' }}
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: "0"
-          ref: "refs/pull/${{ inputs.pr_number }}/merge"
-
-      - name: Get SHA (and verify timestamps against the issue comment date)
-        id: get_sha
-        env:
-          PR_NUMBER: ${{ inputs.pr_number }}
-        run: |
-            git fetch origin refs/pull/$PR_NUMBER/head:refs/remotes/pull/$PR_NUMBER/head
-            git checkout refs/remotes/pull/$PR_NUMBER/head
-            echo "PR_HEAD_SHA: $(git log -1 --format=%H)"
-            echo "PR_HEAD_SHA=$(git log -1 --format=%H)" >> "$GITHUB_OUTPUT"
-            git fetch origin refs/pull/$PR_NUMBER/merge:refs/remotes/pull/$PR_NUMBER/merge
-            git checkout refs/remotes/pull/$PR_NUMBER/merge
-            echo "PR_MERGE_SHA: $(git log -1 --format=%H)"
-            echo "PR_MERGE_SHA=$(git log -1 --format=%H)" >> "$GITHUB_OUTPUT"
-            PR_MERGE_COMMIT_TIMESTAMP=$(git log -1 --date=unix --format=%cd)
-            echo "PR_MERGE_COMMIT_TIMESTAMP: $PR_MERGE_COMMIT_TIMESTAMP"
-            echo "COMMENT_TIMESTAMP: $COMMENT_TIMESTAMP"
-            if [ $COMMENT_TIMESTAMP -le $PR_MERGE_COMMIT_TIMESTAMP ]; then
-              echo "Last commit on the pull request is newer than the issue comment triggering this run! Abort!";
-              exit -1;
-            fi
-
-  get-pr-sha-better:
+  get-pr-info:
     runs-on: ubuntu-22.04
     name: Get PR commit SHA better
     outputs:
@@ -133,6 +99,24 @@ jobs:
               pull_number: ${{ inputs.pr_number }}
             });
 
+            const { data: head_commit }  = await github.rest.repos.getCommit({
+              owner: pr.head.repo.owner.login,
+              repo: pr.head.repo.name,
+              ref: pr.head.ref
+            });
+
+            const { data: merge_commit }  = await github.rest.repos.getCommit({
+              owner: pr.base.repo.owner.login,
+              repo: pr.base.repo.name,
+              ref: pr.merge_commit_sha,
+            });
+
+            const { data: files } = await github.rest.pulls.listFiles({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: ${{ inputs.pr_number }}
+            });
+
             core.setOutput('head_repo_full_name', pr.head.repo.full_name);
             core.setOutput('base_repo_full_name', pr.base.repo.full_name);
             core.setOutput('head_repo_owner', pr.head.repo.owner.login);
@@ -146,43 +130,21 @@ jobs:
             core.setOutput('merge_commit_sha', pr.merge_commit_sha);
             core.setOutput('pr', pr);
 
-            const { data: head_commit }  = await github.rest.repos.getCommit({
-              owner: pr.head.repo.owner.login,
-              repo: pr.head.repo.name,
-              ref: pr.head.ref
-            });
-
-            const { data: merge_commit }  = await github.rest.repos.getCommit({
-              owner: pr.base.repo.owner.login,
-              repo: pr.base.repo.name,
-              ref: pr.merge_commit_sha,
-            });
-
             core.setOutput('head_commit_date', head_commit.commit.committer.date);
             core.setOutput('merge_commit_date', merge_commit.commit.committer.date);
             
-            console.log('PR Details:', {
+            core.setOutput('files', files);            
+            
+            console.log('PR head commit:', {
               head_commit: head_commit,
               commit: head_commit.commit,
               date: head_commit.commit.committer.date
             });
 
-            console.log('PR Details 2:', {
+            console.log('PR merge commit:', {
               merge_commit: merge_commit,
               commit: merge_commit.commit,
               date: merge_commit.commit.committer.date
-            });
-
-            const { data: files } = await github.rest.pulls.listFiles({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              pull_number: ${{ inputs.pr_number }}
-            });
-
-            core.setOutput('files', files);
-            
-            console.log('PR Details 3:', {
-              files: files,
             });
 
       - name: Convert dates to timestamps
